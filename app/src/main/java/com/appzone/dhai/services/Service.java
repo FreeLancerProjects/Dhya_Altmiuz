@@ -3,6 +3,7 @@ package com.appzone.dhai.services;
 import com.appzone.dhai.models.AboutModel;
 import com.appzone.dhai.models.AdsDataModel;
 import com.appzone.dhai.models.BankAccountDataModel;
+import com.appzone.dhai.models.JobsDataModel;
 import com.appzone.dhai.models.OfferDataModel;
 import com.appzone.dhai.models.PackageDataModel;
 import com.appzone.dhai.models.ServiceDataModel;
@@ -101,5 +102,9 @@ public interface Service {
                                     @Field("phone") String phone,
                                     @Field("message") String message
                                     );
+
+
+    @GET("/api/jobs")
+    Call<JobsDataModel> getJobs(@Query("page") int page);
 
 }

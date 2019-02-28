@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.appzone.dhai.R;
+import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.trainings.Fragment_Training_Details;
 import com.appzone.dhai.models.PackageDataModel;
 
@@ -20,12 +21,11 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.MyHolder
 
     private List<PackageDataModel.PackageModel> packageModelList;
     private Context context;
-    private Fragment_Training_Details fragment;
-
-    public PackageAdapter(List<PackageDataModel.PackageModel> packageModelList, Context context,Fragment_Training_Details fragment) {
+    private HomeActivity activity;
+    public PackageAdapter(List<PackageDataModel.PackageModel> packageModelList, Context context) {
         this.packageModelList = packageModelList;
         this.context = context;
-        this.fragment = fragment;
+        activity = (HomeActivity) context;
     }
 
     @NonNull
@@ -46,7 +46,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.MyHolder
             @Override
             public void onClick(View v) {
                 PackageDataModel.PackageModel packageModel = packageModelList.get(holder.getAdapterPosition());
-                fragment.setItemDataToBuy(packageModel);
+                activity.setItemDataToBuy(packageModel);
             }
         });
     }

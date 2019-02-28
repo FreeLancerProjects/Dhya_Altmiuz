@@ -106,6 +106,19 @@
     <string name="loading">إنتظر قليلا...</string>
     <string name="upload_bank_transfer_image">تحميل صورة التحويل البنكي</string>
     <string name="price">التكلفة</string>
+    <string name="reserve">حجز</string>
+    <string name="username">إسم المستخدم</string>
+    <string name="re_type_password">تأكيد كلمة المرور</string>
+    <string name="password_not_match">كلمة المرور غير متطابقة</string>
+    <string name="details">التفاصيل :</string>
+    <string name="save">حفظ</string>
+    <string name="up_tr_bnk_img">قم برفع صورة التحويل البنكية</string>
+    <string name="bank_transfer_image">صورة التحويل البنكي</string>
+    <string name="date">التاريخ</string>
+    <string name="address">العنوان</string>
+    <string name="no_jobs_to_display">لا توجد وظائف لعرضها</string>
+    <string name="upload">رفع</string>
+    <string name="your_date_sent_successfully">تم إرسال بياناتك بنجاح</string>
 
 
 </resources>

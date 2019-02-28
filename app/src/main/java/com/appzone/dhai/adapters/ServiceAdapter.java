@@ -7,10 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appzone.dhai.R;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services.Fragment_Other_Services;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services.Fragment_Services;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services.Fragment_Student;
 import com.appzone.dhai.models.ServiceDataModel;
 
 import java.util.List;
@@ -47,13 +51,34 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof MyHolder)
         {
             ServiceDataModel.ServiceModel serviceModel = serviceModelList.get(holder.getAdapterPosition());
             MyHolder myHolder = (MyHolder) holder;
             myHolder.BindData(serviceModel);
+            myHolder.btn_reserve.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ServiceDataModel.ServiceModel serviceModel = serviceModelList.get(holder.getAdapterPosition());
+                    if (fragment instanceof Fragment_Student)
+                    {
+                        Fragment_Student fragment_student = (Fragment_Student) fragment;
+                        fragment_student.setItemData(serviceModel);
+                    }else if (fragment instanceof Fragment_Other_Services)
+                    {
+                        Fragment_Other_Services fragment_other_services = (Fragment_Other_Services) fragment;
+                        fragment_other_services.setItemData(serviceModel);
+                    }else if (fragment instanceof Fragment_Services)
+                    {
+                        Fragment_Services fragment_services = (Fragment_Services) fragment;
+                        fragment_services.setItemData(serviceModel);
+
+                    }
+                }
+            });
+
         }else
             {
                 ProgressHolder progressHolder = (ProgressHolder) holder;
@@ -69,10 +94,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class MyHolder extends RecyclerView.ViewHolder {
 
         private TextView tv_name;
+        private Button btn_reserve;
 
         public MyHolder(View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.tv_name);
+            btn_reserve = itemView.findViewById(R.id.btn_reserve);
 
         }
 

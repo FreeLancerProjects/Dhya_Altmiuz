@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
     android:scrollbars="none">
@@ -96,6 +98,137 @@
                 android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edt_sign_up_bg"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:padding="7dp"
+                android:src="@drawable/user_color"
+
+                />
+
+            <EditText
+                android:id="@+id/edt_username"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:hint="@string/username"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:inputType="textEmailAddress"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:background="@drawable/edt_sign_up_bg"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+
+            >
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:padding="7dp"
+                android:src="@drawable/lock"
+                />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:counterEnabled="false"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorPrimary"
+                app:errorEnabled="false"
+                android:layout_marginEnd="10dp"
+                tools:ignore="RtlCompat">
+                <EditText
+                    android:id="@+id/edt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:textSize="16sp"
+                    android:background="@color/white"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:background="@drawable/edt_sign_up_bg"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+
+            >
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:padding="7dp"
+                android:src="@drawable/lock"
+                />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:counterEnabled="false"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorPrimary"
+                app:errorEnabled="false"
+                android:layout_marginEnd="10dp"
+                tools:ignore="RtlCompat">
+                <EditText
+                    android:id="@+id/edt_re_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/re_type_password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:textSize="16sp"
+                    android:background="@color/white"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
         <LinearLayout

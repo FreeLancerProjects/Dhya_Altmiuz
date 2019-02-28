@@ -1,4 +1,4 @@
-package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.trainings;
+package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,26 +14,31 @@ import android.widget.EditText;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
+import com.appzone.dhai.models.ServiceDataModel;
 import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.share.Common;
 import com.appzone.dhai.singletone.UserSingleTone;
 
-public class Fragment_Training_Register extends Fragment {
-
-    private EditText edt_name,edt_phone,edt_email,edt_additional_info,edt_description,edt_notes;
+public class Fragment_Electronic_Service_Reserve extends Fragment {
+    private static final String TAG = "DATA";
+    private EditText edt_name,edt_phone,edt_email,edt_username,edt_password,edt_re_password,edt_additional_info,edt_description,edt_notes;
     private Button btn_send;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
     private HomeActivity activity;
-
-    public static Fragment_Training_Register newInstance()
+    private ServiceDataModel.ServiceModel serviceModel;
+    public static Fragment_Electronic_Service_Reserve newInstance(ServiceDataModel.ServiceModel serviceModel)
     {
-        return new Fragment_Training_Register();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TAG,serviceModel);
+        Fragment_Electronic_Service_Reserve fragment_service_reserve = new Fragment_Electronic_Service_Reserve();
+        fragment_service_reserve.setArguments(bundle);
+        return fragment_service_reserve;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reserve,container,false);
+        View view = inflater.inflate(R.layout.fragment_electronic_reserve,container,false);
         initView(view);
         return view;
     }
@@ -46,6 +51,10 @@ public class Fragment_Training_Register extends Fragment {
         edt_name = view.findViewById(R.id.edt_name);
         edt_phone = view.findViewById(R.id.edt_phone);
         edt_email = view.findViewById(R.id.edt_email);
+        edt_username = view.findViewById(R.id.edt_username);
+        edt_password = view.findViewById(R.id.edt_password);
+        edt_re_password = view.findViewById(R.id.edt_re_password);
+
         edt_additional_info = view.findViewById(R.id.edt_additional_info);
         edt_description = view.findViewById(R.id.edt_description);
         edt_notes = view.findViewById(R.id.edt_notes);
@@ -58,7 +67,14 @@ public class Fragment_Training_Register extends Fragment {
             }
         });
 
+        Bundle bundle = getArguments();
+        if (bundle!=null)
+        {
+            serviceModel = (ServiceDataModel.ServiceModel) bundle.getSerializable(TAG);
+        }
         UpdateUi();
+
+
 
     }
 
@@ -75,10 +91,14 @@ public class Fragment_Training_Register extends Fragment {
         }
     }
 
-    private void CheckData() {
+    private void CheckData()
+    {
         String m_name = edt_name.getText().toString().trim();
         String m_phone  = edt_phone.getText().toString().trim();
         String m_email = edt_email.getText().toString().trim();
+        String m_username = edt_username.getText().toString().trim();
+        String m_password = edt_password.getText().toString().trim();
+        String m_re_password = edt_re_password.getText().toString().trim();
         String m_add_info = edt_additional_info.getText().toString().trim();
         String m_description = edt_description.getText().toString().trim();
         String m_notes = edt_notes.getText().toString().trim();
@@ -88,14 +108,24 @@ public class Fragment_Training_Register extends Fragment {
                 m_phone.length()>=6&&
                 m_phone.length()<13&&
                 !TextUtils.isEmpty(m_email)&&
-                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()
+                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&
+                !TextUtils.isEmpty(m_username)&&
+                !TextUtils.isEmpty(m_password)&&
+                m_password.equals(m_re_password)
+
                 )
         {
             Common.CloseKeyBoard(activity,edt_name);
             edt_name.setError(null);
             edt_phone.setError(null);
             edt_email.setError(null);
-            activity.trainingReserve(m_name,m_phone,m_email,m_add_info,m_description,m_notes);
+            edt_additional_info.setError(null);
+            edt_description.setError(null);
+            edt_notes.setError(null);
+            edt_username.setError(null);
+            edt_password.setError(null);
+            edt_re_password.setError(null);
+            activity.electronicServicesReserve(serviceModel.getId(),m_name,m_phone,m_email,m_add_info,m_description,m_notes,m_username,m_password);
 
         }else
             {
@@ -130,11 +160,37 @@ public class Fragment_Training_Register extends Fragment {
                     edt_email.setError(null);
                 }
 
+                if (TextUtils.isEmpty(m_username))
+                {
+                    edt_username.setError(getString(R.string.field_req));
+                }else
+                {
+                    edt_username.setError(null);
+                }
+
+                if (TextUtils.isEmpty(m_password)&&TextUtils.isEmpty(m_re_password))
+                {
+                    edt_password.setError(getString(R.string.field_req));
+                    edt_re_password.setError(getString(R.string.field_req));
+                }else if (TextUtils.isEmpty(m_password))
+                {
+                    edt_password.setError(getString(R.string.field_req));
+                }else if (TextUtils.isEmpty(m_re_password))
+                {
+                    edt_re_password.setError(getString(R.string.field_req));
+                }else if (!m_password.equals(m_re_password))
+                {
+                    edt_re_password.setError(getString(R.string.password_not_match));
+
+                }
+
+
+
+
 
             }
 
     }
-
 
 
 }

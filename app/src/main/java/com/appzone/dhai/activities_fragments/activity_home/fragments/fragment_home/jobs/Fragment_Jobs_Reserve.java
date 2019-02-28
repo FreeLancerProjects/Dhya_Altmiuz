@@ -1,4 +1,4 @@
-package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.trainings;
+package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.jobs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,21 +14,27 @@ import android.widget.EditText;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
+import com.appzone.dhai.models.JobsDataModel;
 import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.share.Common;
 import com.appzone.dhai.singletone.UserSingleTone;
 
-public class Fragment_Training_Register extends Fragment {
-
+public class Fragment_Jobs_Reserve extends Fragment {
+    private static final String TAG = "DATA";
     private EditText edt_name,edt_phone,edt_email,edt_additional_info,edt_description,edt_notes;
     private Button btn_send;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
     private HomeActivity activity;
+    private JobsDataModel.JobsModel jobsModel;
 
-    public static Fragment_Training_Register newInstance()
+    public static Fragment_Jobs_Reserve newInstance(JobsDataModel.JobsModel jobsModel)
     {
-        return new Fragment_Training_Register();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TAG,jobsModel);
+        Fragment_Jobs_Reserve fragment_jobs_reserve = new Fragment_Jobs_Reserve();
+        fragment_jobs_reserve.setArguments(bundle);
+        return fragment_jobs_reserve;
     }
     @Nullable
     @Override
@@ -59,6 +65,12 @@ public class Fragment_Training_Register extends Fragment {
         });
 
         UpdateUi();
+
+        Bundle bundle = getArguments();
+        if (bundle!=null)
+        {
+            jobsModel = (JobsDataModel.JobsModel) bundle.getSerializable(TAG);
+        }
 
     }
 
@@ -95,7 +107,7 @@ public class Fragment_Training_Register extends Fragment {
             edt_name.setError(null);
             edt_phone.setError(null);
             edt_email.setError(null);
-            activity.trainingReserve(m_name,m_phone,m_email,m_add_info,m_description,m_notes);
+            activity.jobReserveByData(jobsModel.getId(),m_name,m_phone,m_email,m_add_info,m_description,m_notes);
 
         }else
             {

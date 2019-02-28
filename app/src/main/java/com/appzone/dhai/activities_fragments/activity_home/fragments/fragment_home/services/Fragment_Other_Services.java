@@ -1,4 +1,4 @@
-package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home;
+package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -30,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Fragment_Student extends Fragment {
+public class Fragment_Other_Services extends Fragment {
 
     private RecyclerView recView;
     private RecyclerView.LayoutManager manager;
@@ -42,19 +42,20 @@ public class Fragment_Student extends Fragment {
     private HomeActivity activity;
     private List<ServiceDataModel.ServiceModel> serviceModelList;
 
-    public static Fragment_Student newInstance()
+    public static Fragment_Other_Services newInstance()
     {
-        return new Fragment_Student();
+        return new Fragment_Other_Services();
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student,container,false);
+        View view = inflater.inflate(R.layout.fragment_other_service,container,false);
         initView(view);
         return view;
     }
 
     private void initView(View view) {
+
         serviceModelList = new ArrayList<>();
         activity = (HomeActivity) getActivity();
         tv_no_offers = view.findViewById(R.id.tv_no_offers);
@@ -95,7 +96,7 @@ public class Fragment_Student extends Fragment {
     private void getServices() {
 
         Api.getService()
-                .getServices(1,1)
+                .getServices(3,1)
                 .enqueue(new Callback<ServiceDataModel>() {
                     @Override
                     public void onResponse(Call<ServiceDataModel> call, Response<ServiceDataModel> response) {
@@ -145,7 +146,7 @@ public class Fragment_Student extends Fragment {
     private void LoadMore(int page_index)
     {
         Api.getService()
-                .getServices(1,page_index)
+                .getServices(3,page_index)
                 .enqueue(new Callback<ServiceDataModel>() {
                     @Override
                     public void onResponse(Call<ServiceDataModel> call, Response<ServiceDataModel> response) {
@@ -191,5 +192,10 @@ public class Fragment_Student extends Fragment {
                         }catch (Exception e){}
                     }
                 });
+    }
+
+    public void setItemData(ServiceDataModel.ServiceModel serviceModel) {
+        activity.DisplayFragmentServiceReserve(serviceModel);
+
     }
 }

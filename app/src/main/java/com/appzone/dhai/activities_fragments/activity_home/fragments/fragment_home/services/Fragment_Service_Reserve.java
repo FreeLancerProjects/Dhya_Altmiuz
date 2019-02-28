@@ -1,4 +1,4 @@
-package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.trainings;
+package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,21 +14,27 @@ import android.widget.EditText;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
+import com.appzone.dhai.models.ServiceDataModel;
 import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.share.Common;
 import com.appzone.dhai.singletone.UserSingleTone;
 
-public class Fragment_Training_Register extends Fragment {
-
+public class Fragment_Service_Reserve extends Fragment {
+    private static final String TAG = "DATA";
     private EditText edt_name,edt_phone,edt_email,edt_additional_info,edt_description,edt_notes;
     private Button btn_send;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
     private HomeActivity activity;
+    private ServiceDataModel.ServiceModel serviceModel;
 
-    public static Fragment_Training_Register newInstance()
+    public static Fragment_Service_Reserve newInstance(ServiceDataModel.ServiceModel serviceModel)
     {
-        return new Fragment_Training_Register();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TAG,serviceModel);
+        Fragment_Service_Reserve fragment_service_reserve = new Fragment_Service_Reserve();
+        fragment_service_reserve.setArguments(bundle);
+        return fragment_service_reserve;
     }
     @Nullable
     @Override
@@ -57,8 +63,14 @@ public class Fragment_Training_Register extends Fragment {
                 CheckData();
             }
         });
-
+        Bundle bundle = getArguments();
+        if (bundle!=null)
+        {
+            serviceModel = (ServiceDataModel.ServiceModel) bundle.getSerializable(TAG);
+        }
         UpdateUi();
+
+
 
     }
 
@@ -75,7 +87,8 @@ public class Fragment_Training_Register extends Fragment {
         }
     }
 
-    private void CheckData() {
+    private void CheckData()
+    {
         String m_name = edt_name.getText().toString().trim();
         String m_phone  = edt_phone.getText().toString().trim();
         String m_email = edt_email.getText().toString().trim();
@@ -95,7 +108,10 @@ public class Fragment_Training_Register extends Fragment {
             edt_name.setError(null);
             edt_phone.setError(null);
             edt_email.setError(null);
-            activity.trainingReserve(m_name,m_phone,m_email,m_add_info,m_description,m_notes);
+            edt_additional_info.setError(null);
+            edt_description.setError(null);
+            edt_notes.setError(null);
+            activity.servicesReserve(serviceModel.getId(),m_name,m_phone,m_email,m_add_info,m_description,m_notes);
 
         }else
             {
@@ -129,7 +145,6 @@ public class Fragment_Training_Register extends Fragment {
                 {
                     edt_email.setError(null);
                 }
-
 
             }
 

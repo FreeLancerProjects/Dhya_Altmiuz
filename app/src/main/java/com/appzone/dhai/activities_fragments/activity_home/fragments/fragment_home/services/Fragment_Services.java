@@ -1,4 +1,4 @@
-package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home;
+package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -190,5 +190,9 @@ public class Fragment_Services extends Fragment {
                         }catch (Exception e){}
                     }
                 });
+    }
+
+    public void setItemData(ServiceDataModel.ServiceModel serviceModel) {
+        activity.DisplayFragmentElectronicServiceReserve(serviceModel);
     }
 }
