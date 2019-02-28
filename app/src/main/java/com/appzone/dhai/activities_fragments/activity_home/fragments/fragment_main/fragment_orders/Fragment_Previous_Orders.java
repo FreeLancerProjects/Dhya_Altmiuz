@@ -53,8 +53,6 @@ public class Fragment_Previous_Orders extends Fragment{
         activity = (HomeActivity) getActivity();
         progBar = view.findViewById(R.id.progBar);
         progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        progBarLoadMore.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-
         tv_no_order = view.findViewById(R.id.tv_no_order);
 
         recView = view.findViewById(R.id.recView);

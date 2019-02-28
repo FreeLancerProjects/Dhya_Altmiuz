@@ -2,9 +2,12 @@ package com.appzone.dhai.services;
 
 import com.appzone.dhai.models.AboutModel;
 import com.appzone.dhai.models.AdsDataModel;
+import com.appzone.dhai.models.BankAccountDataModel;
 import com.appzone.dhai.models.OfferDataModel;
+import com.appzone.dhai.models.PackageDataModel;
 import com.appzone.dhai.models.ServiceDataModel;
 import com.appzone.dhai.models.Terms_ConditionModel;
+import com.appzone.dhai.models.TrainingDataModel;
 import com.appzone.dhai.models.UserModel;
 
 import okhttp3.MultipartBody;
@@ -74,4 +77,29 @@ public interface Service {
 
     @GET("/api/category/{type}/services")
     Call<ServiceDataModel> getServices(@Path("type") int type,@Query("page") int page);
+
+    @GET("/api/trainings")
+    Call<TrainingDataModel> getTrainings(@Query("token") String user_token, @Query("page") int page);
+
+    @GET("/api/packages")
+    Call<PackageDataModel> getPackage();
+
+    @Multipart
+    @POST("/api/reserve-package")
+    Call<ResponseBody> reservePackage(@Part("token") RequestBody user_token,
+                                      @Part("package_id") RequestBody package_id,
+                                      @Part MultipartBody.Part image
+                                      );
+
+    @GET("/api/bank-accounts")
+    Call<BankAccountDataModel> getBankAccount();
+
+    @FormUrlEncoded
+    @POST("/api/contacts")
+    Call<ResponseBody> sendContacts(@Field("name") String name,
+                                    @Field("email") String email,
+                                    @Field("phone") String phone,
+                                    @Field("message") String message
+                                    );
+
 }

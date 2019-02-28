@@ -12,25 +12,30 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appzone.dhai.R;
-import com.appzone.dhai.models.OfferDataModel;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.trainings.Fragment_Training;
+import com.appzone.dhai.models.TrainingDataModel;
 import com.appzone.dhai.tags.Tags;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TrainingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int ITEM_DATA = 1;
     private final int ITEM_LOAD= 2;
 
-    private List<OfferDataModel.OfferModel> offerModelList;
+    private List<TrainingDataModel.TrainingModel> trainingModelList;
     private Context context;
+    private Fragment_Training fragment;
 
-    public OfferAdapter(List<OfferDataModel.OfferModel> offerModelList, Context context) {
-        this.offerModelList = offerModelList;
+    public TrainingAdapter(List<TrainingDataModel.TrainingModel> trainingModelList, Context context, Fragment_Training fragment) {
+        this.trainingModelList = trainingModelList;
         this.context = context;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -39,7 +44,7 @@ public class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (viewType == ITEM_DATA)
         {
-            View view = LayoutInflater.from(context).inflate(R.layout.offer_row,parent,false);
+            View view = LayoutInflater.from(context).inflate(R.layout.training_row,parent,false);
             return new MyHolder(view);
         }else
             {
@@ -50,13 +55,23 @@ public class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof MyHolder)
         {
-            OfferDataModel.OfferModel offerModel = offerModelList.get(holder.getAdapterPosition());
+            TrainingDataModel.TrainingModel trainingModel = trainingModelList.get(holder.getAdapterPosition());
             MyHolder myHolder = (MyHolder) holder;
-            myHolder.BindData(offerModel);
+            myHolder.BindData(trainingModel);
+
+            myHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TrainingDataModel.TrainingModel trainingModel = trainingModelList.get(holder.getAdapterPosition());
+
+                    fragment.setItemData(trainingModel);
+                }
+            });
+
         }else
             {
                 ProgressHolder progressHolder = (ProgressHolder) holder;
@@ -66,35 +81,42 @@ public class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return offerModelList.size();
+        return trainingModelList.size();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
         private ImageView image;
-        private TextView tv_title;
+        private TextView tv_name,tv_description,tv_date;
         private AVLoadingIndicatorView avLoadingIndicator;
 
         public MyHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
-            tv_title = itemView.findViewById(R.id.tv_title);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_date = itemView.findViewById(R.id.tv_date);
+            tv_description = itemView.findViewById(R.id.tv_description);
             avLoadingIndicator = itemView.findViewById(R.id.avLoadingIndicator);
             avLoadingIndicator.smoothToShow();
         }
 
-        public void BindData(OfferDataModel.OfferModel offerModel)
+        public void BindData(TrainingDataModel.TrainingModel trainingModel)
         {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+            String date = dateFormat.format(new Date(trainingModel.getCreated_at()*1000));
+            tv_date.setText(date);
             if (Locale.getDefault().getLanguage().equals("ar"))
             {
-                tv_title.setText(offerModel.getTitle_ar()+"\n"+offerModel.getDescription_ar());
+                tv_name.setText(trainingModel.getDestination_name_ar());
+                tv_description.setText(trainingModel.getDescription_ar());
             }else
                 {
-                    tv_title.setText(offerModel.getTitle_en()+"\n"+offerModel.getDescription_ar());
+                    tv_name.setText(trainingModel.getDestination_name_en());
+                    tv_description.setText(trainingModel.getDescription_en());
 
                 }
 
-            Picasso.with(context).load(Uri.parse(Tags.IMAGE_URL+offerModel.getImage())).fit().into(image, new Callback() {
+            Picasso.with(context).load(Uri.parse(Tags.IMAGE_URL+trainingModel.getImage())).fit().into(image, new Callback() {
                 @Override
                 public void onSuccess() {
                     avLoadingIndicator.smoothToHide();
@@ -119,9 +141,9 @@ public class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        OfferDataModel.OfferModel offerModel = offerModelList.get(position);
+        TrainingDataModel.TrainingModel trainingModel = trainingModelList.get(position);
 
-        if (offerModel !=null)
+        if (trainingModel !=null)
         {
             return ITEM_DATA;
         }else

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appzone.dhai.R;
@@ -36,6 +37,7 @@ public class Fragment_Main extends Fragment {
     private List<AdsDataModel.AdsModel> adsModelList;
     private SliderAdapter sliderAdapter;
     private LinearLayout ll_job,ll_training,ll_students,ll_elec_service,ll_offer,ll_other_service;
+    private TextView tv_no_ads;
     private TimerTask timerTask;
     private Timer timer;
 
@@ -56,6 +58,7 @@ public class Fragment_Main extends Fragment {
     private void initView(View view) {
         adsModelList = new ArrayList<>();
         activity = (HomeActivity) getActivity();
+        tv_no_ads  = view.findViewById(R.id.tv_no_ads);
         pager_slider  = view.findViewById(R.id.pager_slider);
         tab_slider  = view.findViewById(R.id.tab_slider);
         ll_job  = view.findViewById(R.id.ll_job);
@@ -154,6 +157,8 @@ public class Fragment_Main extends Fragment {
     private void UpdateUI(List<AdsDataModel.AdsModel> adsModelList) {
         if (adsModelList.size()>0)
         {
+            tv_no_ads.setVisibility(View.GONE);
+
             if (adsModelList.size()>1)
             {
                 timerTask = new MyTimerTask();
@@ -165,7 +170,10 @@ public class Fragment_Main extends Fragment {
             }
             sliderAdapter = new SliderAdapter(adsModelList,getActivity());
             pager_slider.setAdapter(sliderAdapter);
-        }
+        }else
+            {
+                tv_no_ads.setVisibility(View.VISIBLE);
+            }
     }
 
 

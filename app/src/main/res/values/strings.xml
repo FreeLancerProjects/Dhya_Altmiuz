@@ -45,7 +45,7 @@
     <string name="incorrect_old_password">incorrect old password</string>
     <string name="skip">Skip</string>
     <string name="dhai">Dhai</string>
-    <string name="al_enjaz">Al enjaz</string>
+    <string name="al_enjaz">Al Tmaiuz</string>
     <string name="profile">Profile</string>
     <string name="contact2">Contact</string>
     <string name="more">More</string>
@@ -82,6 +82,27 @@
     <string name="developers">Developers</string>
     <string name="no_offers_to_display">No offers to display</string>
     <string name="no_services_to_display">No services to Display</string>
+    <string name="no_ads_to_display">No ads to display</string>
+    <string name="no_training_to_display">No trainings to display</string>
+    <string name="start">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="register">Register</string>
+    <string name="additional_information">Additional information (optional)</string>
+    <string name="notes_optional">Notes (optional)</string>
+    <string name="details_optinal">Description (optional)</string>
+    <string name="charge_package">Charge package</string>
+    <string name="buy">Buy</string>
+    <string name="no_charge">No charge package</string>
+    <string name="rev_bill">When reviewing a bank transfer a notification will be sent to you</string>
+    <string name="no_bank_accounts">No Bank accounts</string>
+    <string name="account_name">Account name</string>
+    <string name="account_number">Account number</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_thank">Welcome to Dhya Al Tmaiuz thank you for join us</string>
+    <string name="charge">Charge</string>
+    <string name="loading">Loading...</string>
+    <string name="upload_bank_transfer_image">Upload bank transfer image</string>
+    <string name="price">Price</string>
 
 
 </resources>

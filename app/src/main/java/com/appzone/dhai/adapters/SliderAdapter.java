@@ -6,11 +6,11 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.models.AdsDataModel;
 import com.appzone.dhai.tags.Tags;
-import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,10 +37,12 @@ public class SliderAdapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position)
+    {
         View view = LayoutInflater.from(context).inflate(R.layout.slider_row,container,false);
-        RoundedImageView image = view.findViewById(R.id.image);
+        ImageView image = view.findViewById(R.id.image);
         Picasso.with(context).load(Tags.IMAGE_URL+adsModelList.get(position).getImage()).fit().into(image);
+
         container.addView(view);
         return view;
     }

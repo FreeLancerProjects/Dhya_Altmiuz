@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2"
+    android:padding="8dp"
+    >
+    <TextView
+        android:id="@+id/tv_details"
+        android:layout_width="0dp"
+        android:layout_weight="1.4"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+    <Button
+        android:id="@+id/btn_buy"
+        android:layout_width="0dp"
+        android:layout_weight=".6"
+        android:layout_height="27dp"
+        android:background="@drawable/btn_training_register"
+        android:layout_gravity="top"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="@string/buy"
+        android:textAllCaps="false"
+        />
+</LinearLayout>

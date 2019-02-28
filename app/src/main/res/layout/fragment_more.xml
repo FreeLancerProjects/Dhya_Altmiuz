@@ -169,6 +169,7 @@
         android:weightSum="2"
         >
         <TextView
+            android:id="@+id/tv_developer"
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.7"
@@ -180,14 +181,12 @@
             android:textSize="17sp"
             android:clickable="false"
             android:longClickable="false"
-            android:text="@string/developers"
             />
         <ImageView
-            android:id="@+id/arrow5"
             android:layout_width="0dp"
             android:layout_weight=".3"
             android:layout_height="match_parent"
-            android:src="@drawable/black_right_arrow"
+            android:src="@drawable/calling"
             android:padding="17dp"
             android:clickable="false"
             android:longClickable="false"

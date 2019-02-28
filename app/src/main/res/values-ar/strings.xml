@@ -85,5 +85,27 @@
     <string name="developers">المطور</string>
     <string name="no_offers_to_display">لا توجد عروض لعرضها</string>
     <string name="no_services_to_display">لا توجد خدمات لعرضها</string>
+    <string name="no_ads_to_display">لا توجد اعلانات لعرضها</string>
+    <string name="no_training_to_display">لا توجد تدريبات لعرضها</string>
+    <string name="start">البدء</string>
+    <string name="end_time">الانتهاء</string>
+    <string name="register">تسجيل</string>
+    <string name="additional_information">معلومات إضافية (إختياري)</string>
+    <string name="notes_optional">ملاحظات (إختياري)</string>
+    <string name="details_optinal">وصف (إختياري)</string>
+    <string name="charge_package">باقات الشحن</string>
+    <string name="buy">إشترك</string>
+    <string name="no_charge">لا توجد بطاقات شحن</string>
+    <string name="rev_bill">عند مراجعة صورة التحويل البنكي سيتم ارسال إشعار لك.</string>
+    <string name="no_bank_accounts">لا توجد حسابات بنكية</string>
+    <string name="account_name">إسم الحساب</string>
+    <string name="account_number">رقم الحساب</string>
+    <string name="welcome">اهلا بك في ضياء التميز</string>
+    <string name="welcome_thank">اهلا بك في ضياء التميز شكرا لانظمامك معنا</string>
+    <string name="charge">الرصيد</string>
+    <string name="loading">إنتظر قليلا...</string>
+    <string name="upload_bank_transfer_image">تحميل صورة التحويل البنكي</string>
+    <string name="price">التكلفة</string>
+
 
 </resources>

@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:text="@string/full_name"
+            android:text="@string/email_address"
             />
 
         <LinearLayout
@@ -55,7 +55,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/user_color"
+                android:src="@drawable/mail"
                 android:padding="8dp"
                 />
             <EditText

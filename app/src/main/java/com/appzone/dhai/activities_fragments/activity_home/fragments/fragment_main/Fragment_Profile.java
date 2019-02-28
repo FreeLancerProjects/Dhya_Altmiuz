@@ -52,7 +52,7 @@ public class Fragment_Profile extends Fragment {
 
     private AppBarLayout appBar;
     private CircleImageView image;
-    private TextView tv_name,tv_email;
+    private TextView tv_name,tv_email,tv_balance;
     private ImageView arrow1,arrow2,arrow3;
     private LinearLayout ll_name,ll_email,ll_logout;
     private String current_language;
@@ -104,6 +104,7 @@ public class Fragment_Profile extends Fragment {
         appBar = view.findViewById(R.id.appBar);
         image = view.findViewById(R.id.image);
         tv_name = view.findViewById(R.id.tv_name);
+        tv_balance = view.findViewById(R.id.tv_balance);
         tv_email = view.findViewById(R.id.tv_email);
         ll_name = view.findViewById(R.id.ll_name);
         ll_email = view.findViewById(R.id.ll_email);
@@ -161,6 +162,7 @@ public class Fragment_Profile extends Fragment {
             Picasso.with(activity).load(Tags.IMAGE_URL+userModel.getAvatar()).fit().into(image);
             tv_name.setText(userModel.getName());
             tv_email.setText(userModel.getEmail());
+            tv_balance.setText(userModel.getBalance()+" "+getString(R.string.rsa));
         }
 
     }

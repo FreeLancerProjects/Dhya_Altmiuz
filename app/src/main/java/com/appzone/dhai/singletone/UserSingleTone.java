@@ -1,6 +1,9 @@
 package com.appzone.dhai.singletone;
 
+import android.content.Context;
+
 import com.appzone.dhai.models.UserModel;
+import com.appzone.dhai.preferences.Preferences;
 
 public class UserSingleTone {
 
@@ -18,10 +21,6 @@ public class UserSingleTone {
         return instance;
     }
 
-    public static void setInstance(UserSingleTone instance) {
-        UserSingleTone.instance = instance;
-    }
-
     public UserModel getUserModel() {
         return userModel;
     }
@@ -29,9 +28,11 @@ public class UserSingleTone {
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
     }
-    public void clear()
+    public void clear(Context context)
     {
         this.userModel=null;
+        Preferences preferences = Preferences.getInstance();
+        preferences.Clear(context);
     }
 
 }

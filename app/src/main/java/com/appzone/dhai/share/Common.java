@@ -1,6 +1,7 @@
 package com.appzone.dhai.share;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -141,6 +143,18 @@ public class Common {
         dialog.show();
     }
 
+    public static Dialog getProgressDialog(Context context)
+    {
+        Dialog dialog = new Dialog(context);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_progress_dialog);
+        ProgressBar progBar = dialog.findViewById(R.id.progBar);
+        progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context,R.color.color_press), PorterDuff.Mode.SRC_IN);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        return dialog;
+    }
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getImagePath(Context context,Uri uri)
     {

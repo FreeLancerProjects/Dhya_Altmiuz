@@ -55,7 +55,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/mail"
+                android:src="@drawable/user_color"
                 android:padding="8dp"
                 />
             <EditText

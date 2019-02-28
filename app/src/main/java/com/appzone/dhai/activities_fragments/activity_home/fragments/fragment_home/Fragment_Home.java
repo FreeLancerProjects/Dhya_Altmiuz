@@ -41,7 +41,6 @@ public class Fragment_Home extends Fragment {
         ah_bottom.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
-                UpdateAHBottomNavigationPosition(position);
                 switch (position)
                 {
                     case 0:

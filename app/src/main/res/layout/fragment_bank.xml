@@ -23,14 +23,14 @@
         />
 
     <TextView
-        android:id="@+id/tv_no_training"
+        android:id="@+id/tv_no_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="17sp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:text="@string/no_training_to_display"
+        android:text="@string/no_bank_accounts"
         android:visibility="gone"
         />
 </FrameLayout>

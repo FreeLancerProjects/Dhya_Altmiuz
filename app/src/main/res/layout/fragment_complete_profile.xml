@@ -213,7 +213,7 @@
                         <EditText
                             android:id="@+id/edt_email"
                             android:layout_width="match_parent"
-                            android:layout_height="37dp"
+                            android:layout_height="35dp"
                             android:layout_gravity="center_vertical"
                             android:background="@color/white"
                             android:hint="@string/email_address"
@@ -224,7 +224,8 @@
                             android:textColor="@color/black"
                             android:singleLine="true"
                             android:gravity="center_vertical"
-                            />
+                            android:layout_marginEnd="10dp"
+                            tools:ignore="RtlCompat" />
                     </LinearLayout>
 
 
