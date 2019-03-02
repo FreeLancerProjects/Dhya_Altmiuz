@@ -6,13 +6,13 @@ import java.util.List;
 public class ServiceDataModel implements Serializable {
 
     private List<ServiceModel> data;
-    private OfferDataModel.Meta meta;
+    private Meta meta;
 
     public List<ServiceModel> getData() {
         return data;
     }
 
-    public OfferDataModel.Meta getMeta() {
+    public Meta getMeta() {
         return meta;
     }
     public class ServiceModel implements Serializable

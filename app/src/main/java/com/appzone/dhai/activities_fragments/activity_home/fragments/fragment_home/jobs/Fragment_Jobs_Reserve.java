@@ -9,8 +9,12 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
@@ -21,12 +25,15 @@ import com.appzone.dhai.singletone.UserSingleTone;
 
 public class Fragment_Jobs_Reserve extends Fragment {
     private static final String TAG = "DATA";
-    private EditText edt_name,edt_phone,edt_email,edt_additional_info,edt_description,edt_notes;
+    private EditText edt_name,edt_phone,edt_email,edt_id,edt_address,edt_additional_info,edt_description,edt_notes;
+    private Spinner spinner;
+    private String [] spinnerList;
     private Button btn_send;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
     private HomeActivity activity;
     private JobsDataModel.JobsModel jobsModel;
+    private String qualification="";
 
     public static Fragment_Jobs_Reserve newInstance(JobsDataModel.JobsModel jobsModel)
     {
@@ -45,6 +52,7 @@ public class Fragment_Jobs_Reserve extends Fragment {
     }
 
     private void initView(View view) {
+        spinnerList = getResources().getStringArray(R.array.spinner_qualification);
         activity = (HomeActivity) getActivity();
         userSingleTone = UserSingleTone.getInstance();
         userModel = userSingleTone.getUserModel();
@@ -52,6 +60,10 @@ public class Fragment_Jobs_Reserve extends Fragment {
         edt_name = view.findViewById(R.id.edt_name);
         edt_phone = view.findViewById(R.id.edt_phone);
         edt_email = view.findViewById(R.id.edt_email);
+        edt_id = view.findViewById(R.id.edt_id);
+        edt_address = view.findViewById(R.id.edt_address);
+        spinner = view.findViewById(R.id.spinner);
+
         edt_additional_info = view.findViewById(R.id.edt_additional_info);
         edt_description = view.findViewById(R.id.edt_description);
         edt_notes = view.findViewById(R.id.edt_notes);
@@ -63,7 +75,26 @@ public class Fragment_Jobs_Reserve extends Fragment {
                 CheckData();
             }
         });
+        /////////////////////////////////////////////////////
+        spinner.setAdapter(new ArrayAdapter<>(activity,R.layout.spinner_row,spinnerList));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0)
+                {
+                    qualification="";
+                }else
+                    {
+                        qualification = spinnerList[position];
+                    }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        /////////////////////////////////////////////////////
         UpdateUi();
 
         Bundle bundle = getArguments();
@@ -91,6 +122,9 @@ public class Fragment_Jobs_Reserve extends Fragment {
         String m_name = edt_name.getText().toString().trim();
         String m_phone  = edt_phone.getText().toString().trim();
         String m_email = edt_email.getText().toString().trim();
+        String card_id = edt_id.getText().toString().trim();
+        String m_address = edt_address.getText().toString().trim();
+
         String m_add_info = edt_additional_info.getText().toString().trim();
         String m_description = edt_description.getText().toString().trim();
         String m_notes = edt_notes.getText().toString().trim();
@@ -100,14 +134,22 @@ public class Fragment_Jobs_Reserve extends Fragment {
                 m_phone.length()>=6&&
                 m_phone.length()<13&&
                 !TextUtils.isEmpty(m_email)&&
-                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()
+                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&
+                !TextUtils.isEmpty(card_id)&&
+                !TextUtils.isEmpty(m_address)&&
+                !TextUtils.isEmpty(qualification)
                 )
         {
             Common.CloseKeyBoard(activity,edt_name);
             edt_name.setError(null);
             edt_phone.setError(null);
             edt_email.setError(null);
-            activity.jobReserveByData(jobsModel.getId(),m_name,m_phone,m_email,m_add_info,m_description,m_notes);
+            edt_id.setError(null);
+            edt_address.setError(null);
+            edt_additional_info.setError(null);
+            edt_description.setError(null);
+            edt_notes.setError(null);
+            activity.jobReserveByData(jobsModel.getId(),m_name,m_phone,m_email,card_id,m_address,qualification,m_add_info,m_description,m_notes);
 
         }else
             {
@@ -142,6 +184,26 @@ public class Fragment_Jobs_Reserve extends Fragment {
                     edt_email.setError(null);
                 }
 
+                if (TextUtils.isEmpty(card_id))
+                {
+                    edt_id.setError(getString(R.string.field_req));
+                }else
+                {
+                    edt_id.setError(null);
+                }
+
+                if (TextUtils.isEmpty(m_address))
+                {
+                    edt_address.setError(getString(R.string.field_req));
+                }else
+                {
+                    edt_address.setError(null);
+                }
+
+                if (TextUtils.isEmpty(qualification))
+                {
+                    Toast.makeText(activity, R.string.ch_qualification, Toast.LENGTH_SHORT).show();
+                }
 
             }
 

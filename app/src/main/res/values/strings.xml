@@ -116,6 +116,27 @@
     <string name="no_jobs_to_display">No jobs to display</string>
     <string name="upload">upload</string>
     <string name="your_date_sent_successfully">Your date sent successfully</string>
+    <string name="identity_number">Identity number</string>
+    <string name="qualification">Qualification:</string>
+    <string name="ch_qualification">Choose qualification</string>
+    <string name="admin">Admin</string>
+    <string name="order_not_accepted">Order is approved</string>
+    <string name="order_is_approved">Order is accepted</string>
+    <string name="order_finished">Order is finished</string>
+    <string name="accepted">Accepted</string>
+    <string name="refused">Refused</string>
+    <string name="finished">Finished</string>
+    <string name="package_1">package</string>
 
+    <string-array name="spinner_qualification">
+        <item>-Choose-</item>
+        <item>without a qualification</item>
+        <item>Primary</item>
+        <item>Preparatory</item>
+        <item>High school</item>
+        <item>Institute</item>
+        <item>Bachelor</item>
+
+    </string-array>
 
 </resources>

@@ -101,19 +101,21 @@ public class JobsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void BindData(JobsDataModel.JobsModel jobsModel)
         {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
-            String date = dateFormat.format(new Date(jobsModel.getCreated_at()*1000));
-            tv_date.setText(date);
+            SimpleDateFormat dateFormat ;
+
             if (Locale.getDefault().getLanguage().equals("ar"))
             {
                 tv_name.setText(jobsModel.getTitle_ar());
                 tv_description.setText(jobsModel.getDescription_ar());
+                dateFormat = new SimpleDateFormat("yyyy/MM/dd",Locale.getDefault());
             }else
                 {
                     tv_name.setText(jobsModel.getTitle_en());
                     tv_description.setText(jobsModel.getDescription_en());
-
+                    dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
                 }
+            String date = dateFormat.format(new Date(jobsModel.getCreated_at()*1000));
+            tv_date.setText(date);
 
             Picasso.with(context).load(Uri.parse(Tags.IMAGE_URL+jobsModel.getImage())).fit().into(image, new Callback() {
                 @Override

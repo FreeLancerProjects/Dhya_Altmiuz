@@ -27,7 +27,7 @@ import java.util.Locale;
 public class Fragment_Training_Details extends Fragment {
     private final static String TAG = "DATA";
     private ImageView image;
-    private TextView tv_name,tv_details,tv_start_time,tv_end_time,tv_cost,tv_data;
+    private TextView tv_name, tv_details, tv_start_time, tv_end_time, tv_cost, tv_data;
     private Button btn_register;
     private TrainingDataModel.TrainingModel trainingModel;
     private HomeActivity activity;
@@ -35,24 +35,23 @@ public class Fragment_Training_Details extends Fragment {
     private UserSingleTone userSingleTone;
     private UserModel userModel;
 
-    public static Fragment_Training_Details newInstance(TrainingDataModel.TrainingModel trainingModel)
-    {
+    public static Fragment_Training_Details newInstance(TrainingDataModel.TrainingModel trainingModel) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(TAG,trainingModel);
+        bundle.putSerializable(TAG, trainingModel);
         Fragment_Training_Details fragment_training_details = new Fragment_Training_Details();
         fragment_training_details.setArguments(bundle);
         return fragment_training_details;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trainings_details,container,false);
+        View view = inflater.inflate(R.layout.fragment_trainings_details, container, false);
         initView(view);
         return view;
     }
 
-    private void initView(View view)
-    {
+    private void initView(View view) {
         userSingleTone = UserSingleTone.getInstance();
         userModel = userSingleTone.getUserModel();
         current_language = Locale.getDefault().getLanguage();
@@ -70,75 +69,66 @@ public class Fragment_Training_Details extends Fragment {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userModel==null)
-                {
+                if (userModel == null) {
                     activity.CreateUserNotSignInAlertDialog();
-                }else {
+                } else {
 
-                    if (trainingModel.getSale_price()<=userModel.getBalance())
-                    {
+                    if (trainingModel.getSale_price() <= userModel.getBalance()) {
                         activity.DisplayFragmentTrainingRegister();
-                    }else
-                        {
-                           activity.getPackagesData();
-                        }
+                    } else {
+                        activity.getPackagesData();
+                    }
                 }
             }
         });
         Bundle bundle = getArguments();
-        if (bundle!=null)
-        {
+        if (bundle != null) {
             trainingModel = (TrainingDataModel.TrainingModel) bundle.getSerializable(TAG);
             UpdateUI(trainingModel);
         }
 
     }
-    private void UpdateUI(TrainingDataModel.TrainingModel trainingModel)
-    {
-        if (trainingModel!=null)
-        {
-            Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL)+trainingModel.getImage()).fit().into(image);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm aa",Locale.getDefault());
-            String start_time = dateFormat.format(new Date(trainingModel.getStart()*1000));
-            String end_time = dateFormat.format(new Date(trainingModel.getEnd()*1000));
-            tv_start_time.setText(start_time);
-            tv_end_time.setText(end_time);
-            tv_cost.setText(trainingModel.getSale_price()+" "+getString(R.string.rsa));
-            if (current_language.equals("ar"))
-            {
+
+    private void UpdateUI(TrainingDataModel.TrainingModel trainingModel) {
+        if (trainingModel != null) {
+            Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL) + trainingModel.getImage()).fit().into(image);
+
+            SimpleDateFormat dateFormat;
+            tv_cost.setText(trainingModel.getSale_price() + " " + getString(R.string.rsa));
+            if (current_language.equals("ar")) {
                 tv_name.setText(trainingModel.getDestination_name_ar());
                 tv_details.setText(trainingModel.getDestination_name_ar());
+                dateFormat = new SimpleDateFormat("EEE yyyy/MM/dd   mm:hh aa", Locale.getDefault());
 
-            }else
-                {
-                    tv_name.setText(trainingModel.getDestination_name_en());
-                    tv_details.setText(trainingModel.getDestination_name_en());
+            } else {
+                tv_name.setText(trainingModel.getDestination_name_en());
+                tv_details.setText(trainingModel.getDestination_name_en());
+                dateFormat = new SimpleDateFormat("EEE dd/MM/yyyy   hh:mm aa", Locale.getDefault());
 
-                }
+            }
 
-                if (trainingModel.getUser_registered() == 0)
-                {
-                    btn_register.setVisibility(View.VISIBLE);
-                }else
-                    {
-                        tv_data.setVisibility(View.VISIBLE);
+            String start_time = dateFormat.format(new Date(trainingModel.getStart() * 1000));
+            String end_time = dateFormat.format(new Date(trainingModel.getEnd() * 1000));
+            tv_start_time.setText(start_time);
+            tv_end_time.setText(end_time);
 
-                    }
+            if (trainingModel.getUser_registered() == 0) {
+                btn_register.setVisibility(View.VISIBLE);
+            } else {
+                tv_data.setVisibility(View.VISIBLE);
+
+            }
         }
 
     }
 
 
-    public void UpdateUIAfterReserve()
-    {
+    public void UpdateUIAfterReserve() {
         btn_register.setVisibility(View.GONE);
         tv_data.setVisibility(View.VISIBLE);
 
 
     }
-
-
-
 
 
 }

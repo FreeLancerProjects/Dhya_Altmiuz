@@ -4,6 +4,8 @@ import com.appzone.dhai.models.AboutModel;
 import com.appzone.dhai.models.AdsDataModel;
 import com.appzone.dhai.models.BankAccountDataModel;
 import com.appzone.dhai.models.JobsDataModel;
+import com.appzone.dhai.models.NotificationCount;
+import com.appzone.dhai.models.NotificationDataModel;
 import com.appzone.dhai.models.OfferDataModel;
 import com.appzone.dhai.models.PackageDataModel;
 import com.appzone.dhai.models.ServiceDataModel;
@@ -46,6 +48,7 @@ public interface Service {
     @POST("/api/fire-base-token")
     Call<ResponseBody> updateToken(@Field("token") String user_token,
                                    @Field("fire_base_token") String fire_base_token);
+
     @Multipart
     @POST("/api/edit-profile")
     Call<UserModel> updateImage(@Part("token") RequestBody user_token,
@@ -57,6 +60,7 @@ public interface Service {
     Call<UserModel> updateName(@Field("token") String user_token,
                                @Field("name") String name
     );
+
     @FormUrlEncoded
     @POST("/api/edit-profile")
     Call<UserModel> updateEmail(@Field("token") String user_token,
@@ -77,7 +81,7 @@ public interface Service {
     Call<OfferDataModel> getOffers(@Query("page") int page);
 
     @GET("/api/category/{type}/services")
-    Call<ServiceDataModel> getServices(@Path("type") int type,@Query("page") int page);
+    Call<ServiceDataModel> getServices(@Path("type") int type, @Query("page") int page);
 
     @GET("/api/trainings")
     Call<TrainingDataModel> getTrainings(@Query("token") String user_token, @Query("page") int page);
@@ -90,7 +94,7 @@ public interface Service {
     Call<ResponseBody> reservePackage(@Part("token") RequestBody user_token,
                                       @Part("package_id") RequestBody package_id,
                                       @Part MultipartBody.Part image
-                                      );
+    );
 
     @GET("/api/bank-accounts")
     Call<BankAccountDataModel> getBankAccount();
@@ -99,12 +103,85 @@ public interface Service {
     @POST("/api/contacts")
     Call<ResponseBody> sendContacts(@Field("name") String name,
                                     @Field("email") String email,
-                                    @Field("phone") String phone,
                                     @Field("message") String message
-                                    );
+    );
 
 
     @GET("/api/jobs")
     Call<JobsDataModel> getJobs(@Query("page") int page);
 
+    @FormUrlEncoded
+    @POST("/api/reserve-training")
+    Call<ResponseBody> trainingReserve(@Field("token") String user_token,
+                                       @Field("training_id") int training_id,
+                                       @Field("name") String name,
+                                       @Field("phone") String phone,
+                                       @Field("email") String email,
+                                       @Field("notes") String notes,
+                                       @Field("additional_info") String additional_info,
+                                       @Field("description") String description
+
+    );
+
+    @FormUrlEncoded
+    @POST("/api/reserve-service")
+    Call<ResponseBody> serviceReserve(@Field("token") String user_token,
+                                      @Field("service_id") int service_id,
+                                      @Field("name") String name,
+                                      @Field("phone") String phone,
+                                      @Field("email") String email,
+                                      @Field("notes") String notes,
+                                      @Field("additional_info") String additional_info,
+                                      @Field("description") String description
+
+    );
+
+    @FormUrlEncoded
+    @POST("/api/reserve-service")
+    Call<ResponseBody> electronicServiceReserve(@Field("token") String user_token,
+                                                @Field("service_id") int service_id,
+                                                @Field("name") String name,
+                                                @Field("phone") String phone,
+                                                @Field("email") String email,
+                                                @Field("notes") String notes,
+                                                @Field("additional_info") String additional_info,
+                                                @Field("description") String description,
+                                                @Field("username") String username,
+                                                @Field("password") String password
+
+    );
+
+    @FormUrlEncoded
+    @POST("/api/reserve-job")
+    Call<ResponseBody> jobDataReserve(@Field("token") String user_token,
+                                      @Field("job_id") int service_id,
+                                      @Field("name") String name,
+                                      @Field("phone") String phone,
+                                      @Field("email") String email,
+                                      @Field("notes") String notes,
+                                      @Field("additional_info") String additional_info,
+                                      @Field("description") String description,
+                                      @Field("address") String address,
+                                      @Field("identity") String identity,
+                                      @Field("education") String education
+
+
+    );
+
+    @Multipart
+    @POST("/api/reserve-job")
+    Call<ResponseBody> jobPDFReserve(@Part("token") RequestBody user_token,
+                                     @Part("job_id") RequestBody job_id,
+                                     @Part MultipartBody.Part pdf
+                                     );
+    @GET("/api/notifications")
+    Call<NotificationDataModel> getNotification(@Query("token") String user_token,
+                                                @Query("page") int page
+                                                );
+    @GET("api/unread-notifications-count")
+    Call<NotificationCount> getNotificationCount(@Query("token") String user_token);
+
+    @FormUrlEncoded
+    @POST("/api/notifications")
+    Call<ResponseBody> readNotifications(@Field("token") String token);
 }

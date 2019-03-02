@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
     android:scrollbars="none">
@@ -97,16 +99,94 @@
                 android:inputType="textEmailAddress"
                 />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edt_sign_up_bg"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:padding="7dp"
+                android:src="@drawable/id_card"
+
+                />
+
+            <EditText
+                android:id="@+id/edt_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:hint="@string/identity_number"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:inputType="number"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edt_sign_up_bg"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:padding="7dp"
+                android:src="@drawable/map"
+
+                />
+
+            <EditText
+                android:id="@+id/edt_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:hint="@string/address"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:inputType="text"
+                />
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:text="@string/bank_transfer_image"
+            android:text="@string/qualification"
             />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edt_sign_up_bg"
+            >
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:backgroundTint="@color/colorPrimary"
 
+                >
+
+            </Spinner>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

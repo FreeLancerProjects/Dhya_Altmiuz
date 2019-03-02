@@ -102,20 +102,22 @@ public class TrainingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void BindData(TrainingDataModel.TrainingModel trainingModel)
         {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
-            String date = dateFormat.format(new Date(trainingModel.getCreated_at()*1000));
-            tv_date.setText(date);
+            SimpleDateFormat dateFormat ;
+
             if (Locale.getDefault().getLanguage().equals("ar"))
             {
                 tv_name.setText(trainingModel.getDestination_name_ar());
                 tv_description.setText(trainingModel.getDescription_ar());
+                dateFormat  = new SimpleDateFormat("yyyy/MM/dd",Locale.getDefault());
             }else
                 {
                     tv_name.setText(trainingModel.getDestination_name_en());
                     tv_description.setText(trainingModel.getDescription_en());
+                    dateFormat= new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
 
                 }
-
+            String date = dateFormat.format(new Date(trainingModel.getCreated_at()*1000));
+            tv_date.setText(date);
             Picasso.with(context).load(Uri.parse(Tags.IMAGE_URL+trainingModel.getImage())).fit().into(image, new Callback() {
                 @Override
                 public void onSuccess() {

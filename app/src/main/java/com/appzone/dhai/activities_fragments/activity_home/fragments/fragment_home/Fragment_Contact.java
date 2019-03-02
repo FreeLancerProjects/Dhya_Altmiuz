@@ -133,7 +133,7 @@ public class Fragment_Contact extends Fragment {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService()
-                .sendContacts(m_name,m_email,"",m_message)
+                .sendContacts(m_name,m_email,m_message)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

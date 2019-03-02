@@ -119,6 +119,26 @@
     <string name="no_jobs_to_display">لا توجد وظائف لعرضها</string>
     <string name="upload">رفع</string>
     <string name="your_date_sent_successfully">تم إرسال بياناتك بنجاح</string>
+    <string name="identity_number">رقم الهوية</string>
+    <string name="qualification">المؤهل:</string>
+    <string name="ch_qualification">إختر المؤهل</string>
+    <string name="admin">الإدارة</string>
+    <string name="order_not_accepted">الطلب جاري</string>
+    <string name="order_is_approved">تم قبول الطلب</string>
+    <string name="order_finished">تم الانجاز</string>
+    <string name="accepted">تم الموافقة على</string>
+    <string name="refused">تم الرفض</string>
+    <string name="finished">تم الانجاز</string>
+    <string name="package_1">باقة بقيمة</string>
 
+    <string-array name="spinner_qualification">
+        <item>-إختر-</item>
+        <item>بدون مؤهل</item>
+        <item>إبتدائي</item>
+        <item>إعدادي</item>
+        <item>ثانوي</item>
+        <item>معهد</item>
+        <item>بكالوريوس</item>
 
+    </string-array>
 </resources>

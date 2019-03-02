@@ -72,6 +72,15 @@ public class Fragment_Orders extends Fragment {
         //fragment_previous_orders.getOrders();
     }
 
+    public void RefreshTime()
+    {
+        Fragment_New_Orders fragment_new_orders = (Fragment_New_Orders) adapter.getItem(0);
+        fragment_new_orders.NotifyAdapterChangeTime();
+        Fragment_Current_Orders fragment_current_orders = (Fragment_Current_Orders) adapter.getItem(1);
+        fragment_current_orders.NotifyAdapterChangeTime();
+        Fragment_Previous_Orders fragment_previous_orders = (Fragment_Previous_Orders) adapter.getItem(2);
+        fragment_previous_orders.NotifyAdapterChangeTime();
+    }
     public void NavigateToFragmentNew()
     {
         pager.setCurrentItem(0);
@@ -80,7 +89,6 @@ public class Fragment_Orders extends Fragment {
     {
         pager.setCurrentItem(1);
     }
-
     public void NavigateToFragmentPrevious()
     {
         pager.setCurrentItem(2);

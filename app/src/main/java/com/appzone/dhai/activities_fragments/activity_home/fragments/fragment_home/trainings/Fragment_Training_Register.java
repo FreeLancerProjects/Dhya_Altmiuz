@@ -95,6 +95,9 @@ public class Fragment_Training_Register extends Fragment {
             edt_name.setError(null);
             edt_phone.setError(null);
             edt_email.setError(null);
+            edt_additional_info.setError(null);
+            edt_description.setError(null);
+            edt_notes.setError(null);
             activity.trainingReserve(m_name,m_phone,m_email,m_add_info,m_description,m_notes);
 
         }else

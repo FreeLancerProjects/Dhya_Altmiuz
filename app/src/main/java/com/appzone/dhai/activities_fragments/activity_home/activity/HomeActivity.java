@@ -62,6 +62,8 @@ import com.appzone.dhai.activities_fragments.activity_sign_in.activity.SignInAct
 import com.appzone.dhai.activities_fragments.activity_terms_conditions.TermsConditionsActivity;
 import com.appzone.dhai.adapters.PackageAdapter;
 import com.appzone.dhai.models.JobsDataModel;
+import com.appzone.dhai.models.NotificationCount;
+import com.appzone.dhai.models.NotificationDataModel;
 import com.appzone.dhai.models.PackageDataModel;
 import com.appzone.dhai.models.ServiceDataModel;
 import com.appzone.dhai.models.TrainingDataModel;
@@ -71,7 +73,14 @@ import com.appzone.dhai.remote.Api;
 import com.appzone.dhai.share.Common;
 import com.appzone.dhai.singletone.UserSingleTone;
 import com.appzone.dhai.tags.Tags;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -130,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
     private final int IMG1 = 1;
     private Uri uri = null;
     private final String read_permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-
+    private boolean canRead = true;
     //////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +148,7 @@ public class HomeActivity extends AppCompatActivity {
         initView();
         getDataFromIntent();
     }
+
 
 
     private void initView() {
@@ -170,6 +180,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         DisplayFragmentHome();
+        if (userModel!=null)
+        {
+            UpdateToken();
+            getUnreadNotificationCount();
+        }
 
     }
 
@@ -245,6 +260,135 @@ public class HomeActivity extends AppCompatActivity {
         this.userModel = userModel;
     }
 
+    private void UpdateToken()
+    {
+        FirebaseInstanceId.getInstance()
+                .getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()&&task.getResult()!=null)
+                        {
+                            String token = task.getResult().getToken();
+                            Api.getService()
+                                    .updateToken(userModel.getToken(),token)
+                                    .enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful())
+                                            {
+                                                Log.e("token","Success");
+                                            }else
+                                                {
+                                                    try {
+                                                        Log.e("Error_code", response.code() + "" + response.errorBody().string());
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            try {
+                                                Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                                Log.e("Error", t.getMessage());
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+    }
+    private void getUnreadNotificationCount()
+    {
+
+
+            Api.getService()
+                    .getNotificationCount(userModel.getToken())
+                    .enqueue(new Callback<NotificationCount>() {
+                        @Override
+                        public void onResponse(Call<NotificationCount> call, final Response<NotificationCount> response) {
+                            if (response.isSuccessful()&&response.body()!=null)
+                            {
+                                if (response.body().getCount()>0)
+                                {
+                                    canRead=true;
+
+                                }
+                                updateNotificationCount(response.body().getCount());
+                            }else
+                                {
+
+                                    try {
+                                        Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                        }
+
+                        @Override
+                        public void onFailure(Call<NotificationCount> call, Throwable t) {
+                            try {
+                                Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                Log.e("Error", t.getMessage());
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        }
+    private void updateNotificationCount(final int count)
+    {
+        new Handler()
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (fragment_home!=null&&fragment_home.isAdded())
+                        {
+                            fragment_home.updateNotificationCount(count);
+                        }
+                    }
+                },1);
+    }
+    public void ReadNotification()
+    {
+
+        if (canRead)
+        {
+            updateNotificationCount(0);
+
+            Api.getService()
+                    .readNotifications(userModel.getToken())
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful())
+                            {
+                                canRead = false;
+                            }else
+                                {
+                                    try {
+                                        Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            try {
+                                Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                Log.e("Error", t.getMessage());
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        }
+    }
     public void DisplayFragmentHome() {
 
         if (fragment_home == null) {
@@ -352,10 +496,12 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void DisplayFragmentNotifications() {
+    public void DisplayFragmentNotifications()
+    {
         if (userModel == null) {
             CreateUserNotSignInAlertDialog();
         } else {
+
             if (fragment_main != null && fragment_main.isAdded()) {
                 fragmentManager.beginTransaction().hide(fragment_main).commit();
             }
@@ -378,9 +524,17 @@ public class HomeActivity extends AppCompatActivity {
 
             if (fragment_notifications.isAdded()) {
                 fragmentManager.beginTransaction().show(fragment_notifications).commit();
+                new Handler()
+                        .postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragment_notifications.NotifyAdapterChangeTime();
+                            }
+                        },1);
             } else {
                 fragmentManager.beginTransaction().add(R.id.fragment_home_container, fragment_notifications, "fragment_notifications").addToBackStack("fragment_notifications").commit();
             }
+            ReadNotification();
             if (fragment_home != null && fragment_home.isAdded()) {
                 fragment_home.UpdateAHBottomNavigationPosition(2);
 
@@ -415,6 +569,13 @@ public class HomeActivity extends AppCompatActivity {
 
             if (fragment_orders.isAdded()) {
                 fragmentManager.beginTransaction().show(fragment_orders).commit();
+                new  Handler()
+                        .postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                             fragment_orders.RefreshTime();
+                            }
+                        },1);
             } else {
                 fragmentManager.beginTransaction().add(R.id.fragment_home_container, fragment_orders, "fragment_orders").addToBackStack("fragment_orders").commit();
             }
@@ -653,68 +814,257 @@ public class HomeActivity extends AppCompatActivity {
 
     //////////////////////////////////////////////
     public void trainingReserve(String m_name, String m_phone, String m_email, String m_add_info, String m_description, String m_notes) {
-
-        this.training_id = -1;
-
-
-        new Handler()
-                .postDelayed(new Runnable() {
+        final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.show();
+        Api.getService()
+                .trainingReserve(userModel.getToken(),training_id,m_name,m_phone,m_email,m_notes,m_add_info,m_description)
+                .enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void run() {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful())
+                        {
+                            dialog.dismiss();
+                            HomeActivity.this.training_id = -1;
 
-                        if (fragment_training != null && fragment_training.isAdded()) {
-                            fragment_training.getTrainings();
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                        }
-                        if (fragment_training_details != null && fragment_training_details.isAdded()) {
-                            fragment_training_details.UpdateUIAfterReserve();
+                                            if (fragment_training != null && fragment_training.isAdded()) {
+                                                fragment_training.getTrainings();
 
-                        }
+                                            }
+                                            if (fragment_training_details != null && fragment_training_details.isAdded()) {
+                                                fragment_training_details.UpdateUIAfterReserve();
 
+                                            }
+
+                                        }
+                                    }, 1);
+
+                            RefreshFragmentOrder();
+
+                        }else
+                            {
+                                dialog.dismiss();
+
+                                Toast.makeText(HomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                try {
+                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                     }
-                }, 1);
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
 
 
-        RefreshFragmentOrder();
 
     }
 
     public void servicesReserve(int service_id, String m_name, String m_phone, String m_email, String m_add_info, String m_description, String m_notes) {
-        RefreshFragmentOrder();
+        final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.show();
+        Api.getService()
+                .serviceReserve(userModel.getToken(),service_id,m_name,m_phone,m_email,m_notes,m_add_info,m_description)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful())
+                        {
+                            dialog.dismiss();
+
+                            RefreshFragmentOrder();
+
+
+                        }else
+                        {
+                            dialog.dismiss();
+
+                            Toast.makeText(HomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+
 
     }
 
     public void electronicServicesReserve(int service_id, String m_name, String m_phone, String m_email, String m_add_info, String m_description, String m_notes, String username, String password) {
-        RefreshFragmentOrder();
+        final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.show();
+        Api.getService()
+                .electronicServiceReserve(userModel.getToken(),service_id,m_name,m_phone,m_email,m_notes,m_add_info,m_description,username,password)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful())
+                        {
+                            dialog.dismiss();
+
+                            RefreshFragmentOrder();
+
+
+                        }else
+                        {
+                            dialog.dismiss();
+
+                            Toast.makeText(HomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
     }
 
-    public void jobReserveByPDF(String pdf_path)
+    public void jobReserveByPDF(int job_id, String pdf_path)
     {
-        new Handler()
-                .postDelayed(new Runnable() {
+        RequestBody user_token_part = Common.getRequestBodyText(userModel.getToken());
+        RequestBody job_id_part = Common.getRequestBodyText(String.valueOf(job_id));
+        MultipartBody.Part pdf_part = Common.getMultiPartFromPath(pdf_path,"file");
+
+        final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.show();
+        Api.getService()
+                .jobPDFReserve(user_token_part,job_id_part,pdf_part)
+                .enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void run() {
-                        if (fragment_job_details!=null &&fragment_job_details.isAdded())
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful())
                         {
-                            fragment_job_details.updateUIAfterReserve();
+                            dialog.dismiss();
+
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_job_details!=null &&fragment_job_details.isAdded())
+                                            {
+                                                fragment_job_details.updateUIAfterReserve();
+                                            }
+                                        }
+                                    },1);
+                            RefreshFragmentOrder();
+
+
+                        }else
+                        {
+                            dialog.dismiss();
+
+                            Toast.makeText(HomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                },1);
-    }
-    public void jobReserveByData(int job_id, String m_name, String m_phone, String m_email, String m_add_info, String m_description,String m_notes)
-    {
-        super.onBackPressed();
-        new Handler()
-                .postDelayed(new Runnable() {
+
                     @Override
-                    public void run() {
-                        if (fragment_job_details!=null &&fragment_job_details.isAdded())
-                        {
-                            fragment_job_details.updateUIAfterReserve();
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
                         }
                     }
-                },1);
+                });
+
+
     }
+    public void jobReserveByData(int job_id, String m_name, String m_phone, String m_email, String card_id, String m_address, String qualification, String m_add_info, String m_description, String m_notes) {
+        final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.show();
+        Api.getService()
+                .jobDataReserve(userModel.getToken(),job_id,m_name,m_phone,m_email,m_notes,m_add_info,m_description,m_address,card_id,qualification)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful())
+                        {
+                            dialog.dismiss();
+                            fragmentManager.popBackStack();
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_job_details!=null &&fragment_job_details.isAdded())
+                                            {
+                                                fragment_job_details.updateUIAfterReserve();
+                                            }
+                                        }
+                                    },1);
+
+                        }else
+                        {
+                            dialog.dismiss();
+
+                            Toast.makeText(HomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(HomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+
+    }
+
     private void RefreshFragmentOrder() {
         if (fragment_orders != null && fragment_orders.isAdded()) {
             new Handler()
@@ -937,6 +1287,25 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     //////////////////////////////////////////////
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ListenforNewNotification(final NotificationDataModel.NotificationModel notificationModel)
+    {
+        getUnreadNotificationCount();
+
+        new Handler()
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (fragment_notifications!=null&&fragment_notifications.isAdded())
+                        {
+                            fragment_notifications.AddNewNotification(notificationModel);
+                        }
+                    }
+                },1);
+
+    }
+    //////////////////////////////////////////////
     @Override
     public void onBackPressed() {
         Back();
@@ -1103,6 +1472,7 @@ public class HomeActivity extends AppCompatActivity {
         dialog.setView(view);
         dialog.show();
     }
+
 
 
 }

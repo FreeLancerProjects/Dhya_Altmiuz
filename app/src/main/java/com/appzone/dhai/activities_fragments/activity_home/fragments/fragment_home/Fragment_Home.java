@@ -13,6 +13,7 @@ import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 
 public class Fragment_Home extends Fragment {
     private AHBottomNavigation ah_bottom;
@@ -100,4 +101,29 @@ public class Fragment_Home extends Fragment {
         ah_bottom.setCurrentItem(pos,false);
     }
 
+    public void updateNotificationCount(int count)
+    {
+        if (count>0)
+        {
+            AHNotification ahNotification = new AHNotification.Builder()
+                    .setBackgroundColor(ContextCompat.getColor(activity,R.color.not_color_bg))
+                    .setTextColor(ContextCompat.getColor(activity,R.color.colorPrimary))
+                    .setText(String.valueOf(count))
+                    .build();
+            ah_bottom.setNotification(ahNotification,2);
+
+        }else
+            {
+                AHNotification ahNotification = new AHNotification.Builder()
+                        .setBackgroundColor(ContextCompat.getColor(activity,R.color.not_color_bg))
+                        .setTextColor(ContextCompat.getColor(activity,R.color.colorPrimary))
+                        .setText("")
+                        .build();
+                ah_bottom.setNotification(ahNotification,2);
+
+            }
+
+
+
+    }
 }

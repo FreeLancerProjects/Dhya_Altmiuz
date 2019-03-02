@@ -117,7 +117,7 @@ public class Fragment_Job_Details extends Fragment {
 
                     if (jobsModel.getSale_price()<=userModel.getBalance())
                     {
-                        activity.jobReserveByPDF(cv_path);
+                        activity.jobReserveByPDF(jobsModel.getId(),cv_path);
                     }else
                     {
                         activity.getPackagesData();
@@ -170,22 +170,26 @@ public class Fragment_Job_Details extends Fragment {
         if (jobsModel!=null)
         {
             Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL)+jobsModel.getImage()).fit().into(image);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
-            String date = dateFormat.format(new Date(jobsModel.getCreated_at()*1000));
-            tv_date.setText(date);
+            SimpleDateFormat dateFormat ;
+
             if (current_language.equals("ar"))
             {
                 tv_name.setText(jobsModel.getTitle_ar());
                 tv_details.setText(jobsModel.getDescription_ar());
                 tv_address.setText(jobsModel.getAddress_ar());
+                dateFormat =  new SimpleDateFormat("yyyy/MM/dd",Locale.getDefault());
 
             }else
                 {
                     tv_name.setText(jobsModel.getTitle_en());
                     tv_details.setText(jobsModel.getDescription_en());
                     tv_address.setText(jobsModel.getAddress_en());
+                    dateFormat =  new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+
 
                 }
+            String date = dateFormat.format(new Date(jobsModel.getCreated_at()*1000));
+            tv_date.setText(date);
 
             if (jobsModel.getUser_registered() == 0)
             {

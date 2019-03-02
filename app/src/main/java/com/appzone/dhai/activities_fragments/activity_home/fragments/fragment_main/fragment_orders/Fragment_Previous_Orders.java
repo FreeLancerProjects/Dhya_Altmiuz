@@ -16,8 +16,13 @@ import android.widget.TextView;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
+import com.appzone.dhai.adapters.OrderAdapter;
+import com.appzone.dhai.models.OrderDataModel;
 import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.singletone.UserSingleTone;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment_Previous_Orders extends Fragment{
     private RecyclerView recView;
@@ -29,6 +34,8 @@ public class Fragment_Previous_Orders extends Fragment{
     private UserSingleTone userSingleTone;
     private UserModel userModel;
     private TextView tv_no_order;
+    private List<OrderDataModel.OrderModel> orderModelList;
+    private OrderAdapter adapter;
 
 
 
@@ -48,6 +55,7 @@ public class Fragment_Previous_Orders extends Fragment{
 
     private void initView(View view)
     {
+        orderModelList = new ArrayList<>();
         userSingleTone = UserSingleTone.getInstance();
         userModel = userSingleTone.getUserModel();
         activity = (HomeActivity) getActivity();
@@ -58,10 +66,8 @@ public class Fragment_Previous_Orders extends Fragment{
         recView = view.findViewById(R.id.recView);
         manager = new LinearLayoutManager(getActivity());
         recView.setLayoutManager(manager);
-        recView.setHasFixedSize(true);
-        recView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        recView.setDrawingCacheEnabled(true);
-        recView.setItemViewCacheSize(25);
+        adapter = new OrderAdapter(orderModelList,activity,this);
+        recView.setAdapter(adapter);
 
 
         recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -82,6 +88,13 @@ public class Fragment_Previous_Orders extends Fragment{
             }
         });
         //getOrders();
+    }
+    public void NotifyAdapterChangeTime()
+    {
+        if (adapter!=null&&orderModelList.size()>0)
+        {
+            adapter.notifyDataSetChanged();
+        }
     }
 
    /* public void getOrders()
