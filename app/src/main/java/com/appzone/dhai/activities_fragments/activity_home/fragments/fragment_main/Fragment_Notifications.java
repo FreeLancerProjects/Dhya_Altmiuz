@@ -20,6 +20,7 @@ import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.appzone.dhai.adapters.NotificationAdapter;
 import com.appzone.dhai.models.NotificationDataModel;
+import com.appzone.dhai.models.NotificationModel;
 import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.remote.Api;
 import com.appzone.dhai.singletone.UserSingleTone;
@@ -39,7 +40,7 @@ public class Fragment_Notifications extends Fragment {
     private ProgressBar progBar;
     private LinearLayout ll_no_not;
     private NotificationAdapter notificationAdapter;
-    private List<NotificationDataModel.NotificationModel> notificationModelList;
+    private List<NotificationModel> notificationModelList;
     private HomeActivity activity;
     private int current_page=1;
     private boolean isLoading = false;
@@ -203,7 +204,7 @@ public class Fragment_Notifications extends Fragment {
         }
     }
 
-    public void AddNewNotification(NotificationDataModel.NotificationModel notificationModel)
+    public void AddNewNotification(NotificationModel notificationModel)
     {
         notificationModelList.add(0,notificationModel);
         notificationAdapter.notifyDataSetChanged();

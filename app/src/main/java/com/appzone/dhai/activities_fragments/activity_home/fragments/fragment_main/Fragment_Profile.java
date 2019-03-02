@@ -507,5 +507,35 @@ public class Fragment_Profile extends Fragment {
 
 
 
+    public void requestNewProfile()
+    {
+        Api.getService()
+                .getProfileData(userModel.getToken())
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        if (response.isSuccessful()&&response.body()!=null){
+
+                            UpdateUserData(response.body());
+                        }else
+                            {
+                                try {
+                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+    }
+
 
 }

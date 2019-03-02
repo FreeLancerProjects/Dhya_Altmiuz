@@ -184,4 +184,8 @@ public interface Service {
     @FormUrlEncoded
     @POST("/api/notifications")
     Call<ResponseBody> readNotifications(@Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("/api/me")
+    Call<UserModel> getProfileData(@Field("token") String user_token);
 }

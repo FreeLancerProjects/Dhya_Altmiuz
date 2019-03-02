@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appzone.dhai.R;
-import com.appzone.dhai.models.NotificationDataModel;
+import com.appzone.dhai.models.NotificationModel;
 import com.appzone.dhai.share.TimeAgo;
 import com.appzone.dhai.tags.Tags;
 
@@ -23,11 +23,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int ITEM_DATA = 1;
     private final int ITEM_LOAD= 2;
 
-    private List<NotificationDataModel.NotificationModel> notificationModelList;
+    private List<NotificationModel> notificationModelList;
     private Context context;
     private TimeAgo timeAgo;
 
-    public NotificationAdapter(List<NotificationDataModel.NotificationModel> notificationModelList, Context context) {
+    public NotificationAdapter(List<NotificationModel> notificationModelList, Context context) {
         this.notificationModelList = notificationModelList;
         this.context = context;
         timeAgo = TimeAgo.newInstance();
@@ -54,7 +54,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (holder instanceof MyHolder)
         {
-            NotificationDataModel.NotificationModel notificationModel = notificationModelList.get(holder.getAdapterPosition());
+            NotificationModel notificationModel = notificationModelList.get(holder.getAdapterPosition());
             MyHolder myHolder = (MyHolder) holder;
             myHolder.BindData(notificationModel);
         }else
@@ -81,7 +81,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         }
 
-        public void BindData(NotificationDataModel.NotificationModel notificationModel)
+        public void BindData(NotificationModel notificationModel)
         {
 
             Log.e("date",notificationModel.getCreated_at()+"__");
@@ -149,7 +149,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        NotificationDataModel.NotificationModel notificationModel = notificationModelList.get(position);
+        NotificationModel notificationModel = notificationModelList.get(position);
 
         if (notificationModel !=null)
         {

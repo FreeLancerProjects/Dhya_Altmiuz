@@ -41,9 +41,9 @@ import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_ho
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Bank;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Contact;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Home;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Offers;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.jobs.Fragment_Job_Details;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.jobs.Fragment_Jobs;
-import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Offers;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.jobs.Fragment_Jobs_Reserve;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services.Fragment_Electronic_Service_Reserve;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.services.Fragment_Other_Services;
@@ -63,7 +63,7 @@ import com.appzone.dhai.activities_fragments.activity_terms_conditions.TermsCond
 import com.appzone.dhai.adapters.PackageAdapter;
 import com.appzone.dhai.models.JobsDataModel;
 import com.appzone.dhai.models.NotificationCount;
-import com.appzone.dhai.models.NotificationDataModel;
+import com.appzone.dhai.models.NotificationModel;
 import com.appzone.dhai.models.PackageDataModel;
 import com.appzone.dhai.models.ServiceDataModel;
 import com.appzone.dhai.models.TrainingDataModel;
@@ -200,6 +200,14 @@ public class HomeActivity extends AppCompatActivity {
 
                             }
                         }, 3000);
+            }if (intent.hasExtra("status")) {
+                new Handler()
+                        .postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                DisplayFragmentNotifications();
+                            }
+                        }, 1);
             }
         }
     }
@@ -1289,7 +1297,7 @@ public class HomeActivity extends AppCompatActivity {
     //////////////////////////////////////////////
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ListenforNewNotification(final NotificationDataModel.NotificationModel notificationModel)
+    public void ListenToAddNewNotification(final NotificationModel notificationModel)
     {
         getUnreadNotificationCount();
 
@@ -1301,10 +1309,32 @@ public class HomeActivity extends AppCompatActivity {
                         {
                             fragment_notifications.AddNewNotification(notificationModel);
                         }
+
+                        if (notificationModel.getType()==Tags.NOTIFICATION_ACCEPT_CHARGE)
+                        {
+                            if (fragment_profile!=null&&fragment_profile.isAdded())
+                            {
+                                fragment_profile.requestNewProfile();
+                            }
+                        }else if (notificationModel.getType()==Tags.NOTIFICATION_ACCEPT_SERVICE)
+                        {
+                            RefreshFragmentOrder();
+                        }
+                        else if (notificationModel.getType()==Tags.NOTIFICATION_REFUSE_SERVICE)
+                        {
+                            RefreshFragmentOrder();
+
+                        }else if (notificationModel.getType()==Tags.NOTIFICATION_FINISH_SERVICE)
+                        {
+                            RefreshFragmentOrder();
+
+                        }
+
                     }
                 },1);
 
     }
+
     //////////////////////////////////////////////
     @Override
     public void onBackPressed() {
