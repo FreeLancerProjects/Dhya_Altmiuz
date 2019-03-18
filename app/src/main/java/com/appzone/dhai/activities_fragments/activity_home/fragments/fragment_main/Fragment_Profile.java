@@ -3,6 +3,7 @@ package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_m
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -44,6 +45,7 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,8 +55,8 @@ public class Fragment_Profile extends Fragment {
     private AppBarLayout appBar;
     private CircleImageView image;
     private TextView tv_name,tv_email,tv_balance;
-    private ImageView arrow1,arrow2,arrow3;
-    private LinearLayout ll_name,ll_email,ll_logout;
+    private ImageView arrow1,arrow2,arrow3,arrow4;
+    private LinearLayout ll_name,ll_email,ll_logout,ll_charge;
     private String current_language;
     private HomeActivity activity;
     private UserSingleTone userSingleTone;
@@ -84,12 +86,14 @@ public class Fragment_Profile extends Fragment {
         arrow1 = view.findViewById(R.id.arrow1);
         arrow2 = view.findViewById(R.id.arrow2);
         arrow3 = view.findViewById(R.id.arrow3);
+        arrow4 = view.findViewById(R.id.arrow4);
 
         if (current_language.equals("ar"))
         {
             arrow1.setImageResource(R.drawable.black_left_arrow);
             arrow2.setImageResource(R.drawable.black_left_arrow);
             arrow3.setImageResource(R.drawable.black_left_arrow);
+            arrow4.setImageResource(R.drawable.black_left_arrow);
 
 
 
@@ -98,6 +102,8 @@ public class Fragment_Profile extends Fragment {
             arrow1.setImageResource(R.drawable.black_right_arrow);
             arrow2.setImageResource(R.drawable.black_right_arrow);
             arrow3.setImageResource(R.drawable.black_right_arrow);
+            arrow4.setImageResource(R.drawable.black_right_arrow);
+
         }
 
         activity = (HomeActivity) getActivity();
@@ -109,6 +115,7 @@ public class Fragment_Profile extends Fragment {
         ll_name = view.findViewById(R.id.ll_name);
         ll_email = view.findViewById(R.id.ll_email);
         ll_logout = view.findViewById(R.id.ll_logout);
+        ll_charge = view.findViewById(R.id.ll_charge);
 
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -144,6 +151,13 @@ public class Fragment_Profile extends Fragment {
                 CreateDialogUpdateEmail(userModel.getEmail());
             }
         });
+
+        ll_charge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateChargeAlertDialog();
+            }
+        });
         ll_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,10 +173,19 @@ public class Fragment_Profile extends Fragment {
 
         if (userModel!=null)
         {
-            Picasso.with(activity).load(Tags.IMAGE_URL+userModel.getAvatar()).fit().into(image);
+
+            if (userModel.getAvatar()!=null)
+            {
+                Picasso.with(activity).load(Tags.IMAGE_URL+userModel.getAvatar()).fit().into(image);
+
+            }else
+                {
+                    image.setImageResource(R.drawable.user_profile);
+                }
+
             tv_name.setText(userModel.getName());
             tv_email.setText(userModel.getEmail());
-            tv_balance.setText(userModel.getBalance()+" "+getString(R.string.rsa));
+            tv_balance.setText(String.format("%.2f",userModel.getBalance())+" "+getString(R.string.rsa));
         }
 
     }
@@ -537,5 +560,95 @@ public class Fragment_Profile extends Fragment {
                 });
     }
 
+
+    private void CreateChargeAlertDialog()
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setCancelable(true)
+                .create();
+
+        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_charge,null);
+        Button doneBtn = view.findViewById(R.id.doneBtn);
+        final EditText edt_code = view.findViewById(R.id.edt_code);
+        ImageView image_close = view.findViewById(R.id.image_close);
+
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                String code = edt_code.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(code))
+                {
+
+                    edt_code.setError(null);
+                    Common.CloseKeyBoard(activity,edt_code);
+                    Charge(code,dialog);
+                }else
+                    {
+                        edt_code.setError(getString(R.string.field_req));
+
+                    }
+            }
+        });
+
+        image_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations=R.style.dialog_congratulation_animation;
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_window_bg);
+        dialog.setView(view);
+        dialog.show();
+    }
+
+    private void Charge(final String code, final AlertDialog alertDialog)
+    {
+        final ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+        dialog.show();
+        Api.getService()
+                .chargeCoupon(code,userModel.getToken())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful())
+                        {
+                            dialog.dismiss();
+                            alertDialog.dismiss();
+                            Toast.makeText(activity,R.string.succ, Toast.LENGTH_SHORT).show();
+                            requestNewProfile();
+                        }else
+                            {
+                                dialog.dismiss();
+                                if (response.code() == 422)
+                                {
+                                    Toast.makeText(activity, R.string.inc_code, Toast.LENGTH_SHORT).show();
+                                }else
+                                    {
+                                        try {
+                                            Log.e("error_code",response.code()+""+response.errorBody().string());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+
+                                        }
+
+                                    }
+                            }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(activity, R.string.something, Toast.LENGTH_SHORT).show();
+                        }catch (Exception e){}
+                    }
+                });
+    }
 
 }

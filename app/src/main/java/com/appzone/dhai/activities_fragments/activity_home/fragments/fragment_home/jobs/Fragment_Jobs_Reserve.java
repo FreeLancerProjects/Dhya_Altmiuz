@@ -46,7 +46,7 @@ public class Fragment_Jobs_Reserve extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reserve,container,false);
+        View view = inflater.inflate(R.layout.fragment_job_reserve,container,false);
         initView(view);
         return view;
     }
@@ -131,8 +131,7 @@ public class Fragment_Jobs_Reserve extends Fragment {
 
         if (!TextUtils.isEmpty(m_name)&&
                 !TextUtils.isEmpty(m_phone)&&
-                m_phone.length()>=6&&
-                m_phone.length()<13&&
+                m_phone.length()==9&&
                 !TextUtils.isEmpty(m_email)&&
                 Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&
                 !TextUtils.isEmpty(card_id)&&
@@ -163,7 +162,7 @@ public class Fragment_Jobs_Reserve extends Fragment {
                 if (TextUtils.isEmpty(m_phone))
                 {
                     edt_phone.setError(getString(R.string.field_req));
-                }else if (m_phone.length()<6 || m_phone.length()>= 13)
+                }else if (m_phone.length()!= 9)
                 {
                     edt_phone.setError(getString(R.string.inv_phone));
                 }

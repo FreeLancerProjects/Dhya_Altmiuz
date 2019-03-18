@@ -73,6 +73,10 @@ public class JobsDataModel implements Serializable {
         public int getUser_registered() {
             return user_registered;
         }
+
+        public void setUser_registered(int user_registered) {
+            this.user_registered = user_registered;
+        }
     }
 
     public class Meta implements Serializable

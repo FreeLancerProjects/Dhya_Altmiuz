@@ -41,6 +41,7 @@
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+
                     />
             </LinearLayout>
 
@@ -137,130 +138,129 @@
 
         </LinearLayout>
 
-        <FrameLayout
+        <TextView
+            android:id="@+id/tv_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:text="@string/your_date_sent_successfully"
+            android:visibility="gone"
+            android:layout_marginTop="100dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
             >
-            <TextView
-                android:id="@+id/tv_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="@string/your_date_sent_successfully"
-                android:visibility="gone"
-                />
             <LinearLayout
-                android:id="@+id/ll_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:visibility="gone"
+
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:weightSum="3"
+                    >
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_weight="1"
+                        android:background="@color/gray3"
+                        android:layout_gravity="center_vertical"
+                        />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:text="@string/register"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_weight="1"
+                        android:background="@color/gray3"
+                        android:layout_gravity="center_vertical"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+
+                >
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/btn_training_register"
+                    android:textColor="@color/white"
+                    android:text="@string/register"
+                    android:textSize="17sp"
+                    android:visibility="visible"
+                    android:layout_marginEnd="8dp"
+                    tools:ignore="RtlCompat" />
+                <FrameLayout
+                    android:id="@+id/fl_cv"
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    tools:ignore="RtlCompat"
+                    android:background="@drawable/cv_bg"
+
 
                     >
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:weightSum="3"
-                        >
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1px"
-                            android:layout_weight="1"
-                            android:background="@color/gray3"
-                            android:layout_gravity="center_vertical"
-                            />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:text="@string/register"
-                            android:background="@color/white"
-                            android:gravity="center"
-                            />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1px"
-                            android:layout_weight="1"
-                            android:background="@color/gray3"
-                            android:layout_gravity="center_vertical"
-                            />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-
-                    >
-                    <Button
-                        android:id="@+id/btn_register"
-                        android:layout_width="150dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/btn_training_register"
-                        android:textColor="@color/white"
-                        android:text="@string/register"
-                        android:textSize="17sp"
-                        android:visibility="visible"
-                        android:layout_marginEnd="8dp"
-                        tools:ignore="RtlCompat" />
-                    <FrameLayout
-                        android:id="@+id/fl_cv"
-                        android:layout_width="150dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="8dp"
-                        tools:ignore="RtlCompat"
-                        android:background="@drawable/cv_bg"
-
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        android:descendantFocusability="blocksDescendants"
 
                         >
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal"
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/pdf"
                             android:clickable="false"
                             android:longClickable="false"
-                            android:descendantFocusability="blocksDescendants"
-
-                            >
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:src="@drawable/pdf"
-                                android:clickable="false"
-                                android:longClickable="false"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:paddingStart="8dp"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                android:text="CV"
-                                android:clickable="false"
-                                android:longClickable="false"
-                                />
-                        </LinearLayout>
-                    </FrameLayout>
-                </LinearLayout>
+                            android:padding="5dp"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingStart="8dp"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:text="CV"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            />
+                    </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
+
             <net.cachapa.expandablelayout.ExpandableLayout
                 android:id="@+id/expand_layout"
                 android:layout_width="match_parent"
@@ -282,7 +282,7 @@
                     <TextView
                         android:id="@+id/tv_file_path"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="20dp"
                         android:textColor="@color/black"
                         android:paddingLeft="5dp"
@@ -310,7 +310,8 @@
                 </LinearLayout>
             </net.cachapa.expandablelayout.ExpandableLayout>
 
-        </FrameLayout>
+        </LinearLayout>
+
 
 
 

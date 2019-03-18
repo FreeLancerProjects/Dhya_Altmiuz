@@ -7,6 +7,7 @@ import com.appzone.dhai.models.JobsDataModel;
 import com.appzone.dhai.models.NotificationCount;
 import com.appzone.dhai.models.NotificationDataModel;
 import com.appzone.dhai.models.OfferDataModel;
+import com.appzone.dhai.models.OrderDataModel;
 import com.appzone.dhai.models.PackageDataModel;
 import com.appzone.dhai.models.ServiceDataModel;
 import com.appzone.dhai.models.Terms_ConditionModel;
@@ -29,16 +30,26 @@ import retrofit2.http.Query;
 public interface Service {
     @FormUrlEncoded
     @POST("/api/login")
-    Call<UserModel> SignIn(@Field("phone") String phone
+    Call<UserModel> SignIn(@Field("email") String phone,
+                           @Field("password") String password
     );
 
     @Multipart
     @POST("api/sign-up")
-    Call<UserModel> SignUp(@Part("name") RequestBody name,
-                           @Part("phone") RequestBody phone,
-                           @Part("email") RequestBody email,
-                           @Part MultipartBody.Part avatar
+    Call<UserModel> SignUpWithImage(@Part("name") RequestBody name,
+                                    @Part("phone") RequestBody phone,
+                                    @Part("email") RequestBody email,
+                                    @Part("password") RequestBody password,
+                                    @Part MultipartBody.Part avatar
 
+    );
+
+    @Multipart
+    @POST("api/sign-up")
+    Call<UserModel> SignUpWithoutImage(@Part("name") RequestBody name,
+                                       @Part("phone") RequestBody phone,
+                                       @Part("email") RequestBody email,
+                                       @Part("password") RequestBody password
     );
 
     @GET("/api/get-terms-condition")
@@ -108,7 +119,7 @@ public interface Service {
 
 
     @GET("/api/jobs")
-    Call<JobsDataModel> getJobs(@Query("page") int page);
+    Call<JobsDataModel> getJobs(@Query("token") String user_token, @Query("page") int page);
 
     @FormUrlEncoded
     @POST("/api/reserve-training")
@@ -173,11 +184,13 @@ public interface Service {
     Call<ResponseBody> jobPDFReserve(@Part("token") RequestBody user_token,
                                      @Part("job_id") RequestBody job_id,
                                      @Part MultipartBody.Part pdf
-                                     );
+    );
+
     @GET("/api/notifications")
     Call<NotificationDataModel> getNotification(@Query("token") String user_token,
                                                 @Query("page") int page
-                                                );
+    );
+
     @GET("api/unread-notifications-count")
     Call<NotificationCount> getNotificationCount(@Query("token") String user_token);
 
@@ -188,4 +201,15 @@ public interface Service {
     @FormUrlEncoded
     @POST("/api/me")
     Call<UserModel> getProfileData(@Field("token") String user_token);
+
+    @GET("/api/orders")
+    Call<OrderDataModel> getOrders(@Query("token") String token,
+                                   @Query("type") String type,
+                                   @Query("page") int page
+    );
+
+    @FormUrlEncoded
+    @POST("/api/disable-coupon")
+    Call<ResponseBody> chargeCoupon(@Field("code") String code,
+                                    @Field("token") String user_token);
 }

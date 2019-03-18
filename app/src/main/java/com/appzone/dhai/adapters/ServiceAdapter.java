@@ -93,12 +93,14 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_name;
+        private TextView tv_name,tv_price;
         private Button btn_reserve;
 
         public MyHolder(View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.tv_name);
+            tv_price = itemView.findViewById(R.id.tv_price);
+
             btn_reserve = itemView.findViewById(R.id.btn_reserve);
 
         }
@@ -113,6 +115,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     tv_name.setText(serviceModel.getTitle_en());
 
                 }
+
+                tv_price.setText(serviceModel.getSale_price()+" "+context.getString(R.string.rsa));
 
         }
     }

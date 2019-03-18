@@ -19,5 +19,6 @@
     <color name="nav_color">#646466</color>
     <color name="color_press">#c52371</color>
     <color name="not_color_bg">#FDD835</color>
+    <color name="green_online">#4CAF50</color>
 
 </resources>

@@ -14,21 +14,28 @@ import android.widget.EditText;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
+import com.appzone.dhai.models.TrainingDataModel;
 import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.share.Common;
 import com.appzone.dhai.singletone.UserSingleTone;
 
 public class Fragment_Training_Register extends Fragment {
-
+    private static final String TAG="DATA";
     private EditText edt_name,edt_phone,edt_email,edt_additional_info,edt_description,edt_notes;
     private Button btn_send;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
     private HomeActivity activity;
+    private TrainingDataModel.TrainingModel trainingModel;
 
-    public static Fragment_Training_Register newInstance()
+    public static Fragment_Training_Register newInstance(TrainingDataModel.TrainingModel trainingModel)
     {
-        return new Fragment_Training_Register();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TAG,trainingModel);
+        Fragment_Training_Register fragment_training_register = new Fragment_Training_Register();
+        fragment_training_register.setArguments(bundle);
+
+        return fragment_training_register;
     }
     @Nullable
     @Override
@@ -57,8 +64,13 @@ public class Fragment_Training_Register extends Fragment {
                 CheckData();
             }
         });
-
+        Bundle bundle = getArguments();
+        if (bundle!=null)
+        {
+            trainingModel = (TrainingDataModel.TrainingModel) bundle.getSerializable(TAG);
+        }
         UpdateUi();
+
 
     }
 
@@ -85,8 +97,7 @@ public class Fragment_Training_Register extends Fragment {
 
         if (!TextUtils.isEmpty(m_name)&&
                 !TextUtils.isEmpty(m_phone)&&
-                m_phone.length()>=6&&
-                m_phone.length()<13&&
+                m_phone.length()==9&&
                 !TextUtils.isEmpty(m_email)&&
                 Patterns.EMAIL_ADDRESS.matcher(m_email).matches()
                 )
@@ -98,7 +109,7 @@ public class Fragment_Training_Register extends Fragment {
             edt_additional_info.setError(null);
             edt_description.setError(null);
             edt_notes.setError(null);
-            activity.trainingReserve(m_name,m_phone,m_email,m_add_info,m_description,m_notes);
+            activity.trainingReserve(trainingModel.getId(),m_name,m_phone,m_email,m_add_info,m_description,m_notes);
 
         }else
             {
@@ -112,7 +123,7 @@ public class Fragment_Training_Register extends Fragment {
                 if (TextUtils.isEmpty(m_phone))
                 {
                     edt_phone.setError(getString(R.string.field_req));
-                }else if (m_phone.length()<6 || m_phone.length()>= 13)
+                }else if (m_phone.length()!=9)
                 {
                     edt_phone.setError(getString(R.string.inv_phone));
                 }

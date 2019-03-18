@@ -50,6 +50,8 @@ public class Fragment_Training extends Fragment {
     {
         return new Fragment_Training();
     }
+    private int selectedPos = -1;
+    private TrainingDataModel.TrainingModel selectedTrainingModel=null;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -203,7 +205,22 @@ public class Fragment_Training extends Fragment {
                 });
     }
 
-    public void setItemData(TrainingDataModel.TrainingModel trainingModel) {
+    public void RefreshAdapter()
+    {
+        if (selectedPos!=-1 && selectedTrainingModel!=null)
+        {
+
+            selectedTrainingModel.setUser_registered(1);
+            trainingModelList.set(selectedPos,selectedTrainingModel);
+            trainingAdapter.notifyItemChanged(selectedPos,selectedTrainingModel);
+            selectedPos = -1;
+            selectedTrainingModel = null;
+        }
+    }
+
+    public void setItemData(TrainingDataModel.TrainingModel trainingModel, int pos) {
         activity.DisplayFragmentTrainingDetails(trainingModel);
+        selectedPos = pos;
+        selectedTrainingModel = trainingModel;
     }
 }

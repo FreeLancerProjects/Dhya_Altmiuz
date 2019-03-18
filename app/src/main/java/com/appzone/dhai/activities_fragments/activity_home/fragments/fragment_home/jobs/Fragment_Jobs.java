@@ -20,7 +20,9 @@ import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.appzone.dhai.adapters.JobsAdapter;
 import com.appzone.dhai.models.JobsDataModel;
+import com.appzone.dhai.models.UserModel;
 import com.appzone.dhai.remote.Api;
+import com.appzone.dhai.singletone.UserSingleTone;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +43,11 @@ public class Fragment_Jobs extends Fragment {
     private boolean isLoading = false;
     private HomeActivity activity;
     private List<JobsDataModel.JobsModel> jobsModelList;
-
+    private UserSingleTone userSingleTone;
+    private UserModel userModel;
+    private String user_token="";
+    private int selectedPos = -1;
+    private JobsDataModel.JobsModel selectedJobModel=null;
     public static Fragment_Jobs newInstance()
     {
         return new Fragment_Jobs();
@@ -56,6 +62,12 @@ public class Fragment_Jobs extends Fragment {
 
     private void initView(View view) {
 
+        userSingleTone = UserSingleTone.getInstance();
+        userModel = userSingleTone.getUserModel();
+        if (userModel!=null)
+        {
+            user_token = userModel.getToken();
+        }
         jobsModelList = new ArrayList<>();
         activity = (HomeActivity) getActivity();
         tv_no_jobs = view.findViewById(R.id.tv_no_jobs);
@@ -90,13 +102,13 @@ public class Fragment_Jobs extends Fragment {
             }
 
         });
-        getTrainings();
+        getJobs();
     }
 
-    public void getTrainings() {
+    public void getJobs() {
 
         Api.getService()
-                .getJobs(1)
+                .getJobs(user_token,1)
                 .enqueue(new Callback<JobsDataModel>() {
                     @Override
                     public void onResponse(Call<JobsDataModel> call, Response<JobsDataModel> response) {
@@ -146,7 +158,7 @@ public class Fragment_Jobs extends Fragment {
     private void LoadMore(int page_index)
     {
         Api.getService()
-                .getJobs(page_index)
+                .getJobs(user_token,page_index)
                 .enqueue(new Callback<JobsDataModel>() {
                     @Override
                     public void onResponse(Call<JobsDataModel> call, Response<JobsDataModel> response) {
@@ -194,8 +206,23 @@ public class Fragment_Jobs extends Fragment {
                 });
     }
 
-    public void setItemData(JobsDataModel.JobsModel jobsModel) {
+    public void RefreshAdapter()
+    {
+        if (selectedPos!=-1 && selectedJobModel!=null)
+        {
+
+            selectedJobModel.setUser_registered(1);
+            jobsModelList.set(selectedPos,selectedJobModel);
+            jobsAdapter.notifyItemChanged(selectedPos,selectedJobModel);
+            selectedPos = -1;
+            selectedJobModel = null;
+        }
+    }
+    public void setItemData(JobsDataModel.JobsModel jobsModel, int pos) {
 
         activity.DisplayFragmentJobsDetails(jobsModel);
+        selectedJobModel = jobsModel;
+        selectedPos = pos;
+
     }
 }

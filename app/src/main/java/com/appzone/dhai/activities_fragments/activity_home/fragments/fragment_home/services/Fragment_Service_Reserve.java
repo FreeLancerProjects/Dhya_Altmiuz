@@ -98,8 +98,7 @@ public class Fragment_Service_Reserve extends Fragment {
 
         if (!TextUtils.isEmpty(m_name)&&
                 !TextUtils.isEmpty(m_phone)&&
-                m_phone.length()>=6&&
-                m_phone.length()<13&&
+                m_phone.length()==9&&
                 !TextUtils.isEmpty(m_email)&&
                 Patterns.EMAIL_ADDRESS.matcher(m_email).matches()
                 )
@@ -125,7 +124,7 @@ public class Fragment_Service_Reserve extends Fragment {
                 if (TextUtils.isEmpty(m_phone))
                 {
                     edt_phone.setError(getString(R.string.field_req));
-                }else if (m_phone.length()<6 || m_phone.length()>= 13)
+                }else if (m_phone.length()!=9)
                 {
                     edt_phone.setError(getString(R.string.inv_phone));
                 }

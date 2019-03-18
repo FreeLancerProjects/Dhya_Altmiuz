@@ -15,8 +15,6 @@ import android.widget.TextView;
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.appzone.dhai.models.TrainingDataModel;
-import com.appzone.dhai.models.UserModel;
-import com.appzone.dhai.singletone.UserSingleTone;
 import com.appzone.dhai.tags.Tags;
 import com.squareup.picasso.Picasso;
 
@@ -27,13 +25,12 @@ import java.util.Locale;
 public class Fragment_Training_Details extends Fragment {
     private final static String TAG = "DATA";
     private ImageView image;
-    private TextView tv_name, tv_details, tv_start_time, tv_end_time, tv_cost, tv_data;
+    private TextView tv_name, tv_details,tv_organization, tv_start_time, tv_end_time, tv_cost, tv_data;
     private Button btn_register;
     private TrainingDataModel.TrainingModel trainingModel;
     private HomeActivity activity;
     private String current_language;
-    private UserSingleTone userSingleTone;
-    private UserModel userModel;
+
 
     public static Fragment_Training_Details newInstance(TrainingDataModel.TrainingModel trainingModel) {
         Bundle bundle = new Bundle();
@@ -52,12 +49,13 @@ public class Fragment_Training_Details extends Fragment {
     }
 
     private void initView(View view) {
-        userSingleTone = UserSingleTone.getInstance();
-        userModel = userSingleTone.getUserModel();
+
         current_language = Locale.getDefault().getLanguage();
         activity = (HomeActivity) getActivity();
         image = view.findViewById(R.id.image);
         tv_name = view.findViewById(R.id.tv_name);
+        tv_organization = view.findViewById(R.id.tv_organization);
+
         tv_details = view.findViewById(R.id.tv_details);
         tv_start_time = view.findViewById(R.id.tv_start_time);
         tv_end_time = view.findViewById(R.id.tv_end_time);
@@ -69,16 +67,8 @@ public class Fragment_Training_Details extends Fragment {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userModel == null) {
-                    activity.CreateUserNotSignInAlertDialog();
-                } else {
+                activity.DisplayFragmentTrainingRegister(trainingModel);
 
-                    if (trainingModel.getSale_price() <= userModel.getBalance()) {
-                        activity.DisplayFragmentTrainingRegister();
-                    } else {
-                        activity.getPackagesData();
-                    }
-                }
             }
         });
         Bundle bundle = getArguments();
@@ -96,12 +86,15 @@ public class Fragment_Training_Details extends Fragment {
             SimpleDateFormat dateFormat;
             tv_cost.setText(trainingModel.getSale_price() + " " + getString(R.string.rsa));
             if (current_language.equals("ar")) {
-                tv_name.setText(trainingModel.getDestination_name_ar());
+                tv_organization.setText(trainingModel.getDestination_name_ar());
+                tv_name.setText(trainingModel.getTitle_ar());
                 tv_details.setText(trainingModel.getDestination_name_ar());
                 dateFormat = new SimpleDateFormat("EEE yyyy/MM/dd   mm:hh aa", Locale.getDefault());
 
             } else {
-                tv_name.setText(trainingModel.getDestination_name_en());
+                tv_organization.setText(trainingModel.getDestination_name_en());
+
+                tv_name.setText(trainingModel.getTitle_en());
                 tv_details.setText(trainingModel.getDestination_name_en());
                 dateFormat = new SimpleDateFormat("EEE dd/MM/yyyy   hh:mm aa", Locale.getDefault());
 

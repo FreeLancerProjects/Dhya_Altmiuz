@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.appzone.dhai.models.OrderDataModel;
 import com.appzone.dhai.share.TimeAgo;
 
 import java.util.List;
+import java.util.Locale;
 
 public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int ITEM_DATA = 1;
@@ -88,18 +90,33 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public void BindData(OrderDataModel.OrderModel orderModel)
         {
 
+            if (Locale.getDefault().getLanguage().equals("ar"))
+            {
+                tv_title.setText(orderModel.getTitle_ar());
+            }else
+                {
+                    tv_title.setText(orderModel.getTitle_en());
 
-            //tv_date.setText(timeAgo.getTime());
+                }
+
+            Log.e("order_date",orderModel.getCreated_at()+"");
+            tv_date.setText(timeAgo.getTime(orderModel.getCreated_at()*1000));
             if (fragment instanceof Fragment_New_Orders)
             {
-                tv_content.setText(R.string.order_not_accepted);
+                tv_content.setText(context.getString(R.string.order_not_accepted));
+                image_state.setImageResource(R.drawable.clock3);
+
             }else if (fragment instanceof Fragment_Current_Orders)
             {
-                tv_content.setText(R.string.order_is_approved);
+                tv_content.setText(context.getString(R.string.order_is_approved));
+                image_state.setImageResource(R.drawable.clock2);
+
 
             }else if (fragment instanceof Fragment_Previous_Orders)
             {
-                tv_content.setText(R.string.order_finished);
+                image_state.setImageResource(R.drawable.done);
+
+                tv_content.setText(context.getString(R.string.order_finished));
 
             }
         }

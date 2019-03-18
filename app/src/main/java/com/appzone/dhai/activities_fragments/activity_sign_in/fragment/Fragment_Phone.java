@@ -58,7 +58,7 @@ public class Fragment_Phone extends Fragment{
         {
             edt_phone.setError(null);
             Common.CloseKeyBoard(activity,edt_phone);
-            activity.signIn(phone);
+            //activity.signIn(phone);
         }else
             {
                 if (TextUtils.isEmpty(phone))

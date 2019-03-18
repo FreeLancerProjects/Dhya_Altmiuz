@@ -68,7 +68,7 @@ public class TrainingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     TrainingDataModel.TrainingModel trainingModel = trainingModelList.get(holder.getAdapterPosition());
 
-                    fragment.setItemData(trainingModel);
+                    fragment.setItemData(trainingModel,holder.getAdapterPosition());
                 }
             });
 
@@ -106,12 +106,12 @@ public class TrainingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if (Locale.getDefault().getLanguage().equals("ar"))
             {
-                tv_name.setText(trainingModel.getDestination_name_ar());
+                tv_name.setText(trainingModel.getTitle_ar());
                 tv_description.setText(trainingModel.getDescription_ar());
                 dateFormat  = new SimpleDateFormat("yyyy/MM/dd",Locale.getDefault());
             }else
                 {
-                    tv_name.setText(trainingModel.getDestination_name_en());
+                    tv_name.setText(trainingModel.getTitle_en());
                     tv_description.setText(trainingModel.getDescription_en());
                     dateFormat= new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
 

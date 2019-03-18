@@ -65,7 +65,7 @@
     <string name="previous_order">السابقة</string>
     <string name="no_orders_to_display">لا توجد طلبات لعرضها</string>
     <string name="you_are_just_one_step_away">خطوة اخيرة...</string>
-    <string name="_500_500_pixel">500 بكسل * 500 بكسل</string>
+    <string name="_500_500_pixel">500 بكسل * 500 بكسل (إختياري)</string>
     <string name="personal_information">معلومات شخصية</string>
     <string name="sign_up_using_phone">تسجيل برقم الجوال</string>
     <string name="by_using_this_app_you_agree_to">إستخدامك لهذا التطبيق يعني موافقتك على الشروط والاحكام</string>
@@ -130,6 +130,13 @@
     <string name="refused">تم الرفض</string>
     <string name="finished">تم الانجاز</string>
     <string name="package_1">باقة بقيمة</string>
+    <string name="organization">إسم الجهة</string>
+    <string name="phone_number">رقم الجوال</string>
+    <string name="inc_ph_pas">رقم الجوال او كلمة المرور خاطئة</string>
+    <string name="recharge_code">شحن رصيد</string>
+    <string name="code">كود الشحن</string>
+    <string name="charge2">شحن الرصيد</string>
+    <string name="inc_code">الكود غير صحيح</string>
 
     <string-array name="spinner_qualification">
         <item>-إختر-</item>

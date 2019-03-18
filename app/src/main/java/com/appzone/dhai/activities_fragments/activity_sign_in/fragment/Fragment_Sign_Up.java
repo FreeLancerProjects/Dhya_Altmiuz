@@ -31,11 +31,11 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.Locale;
 
-public class Fragment_Complete_Profile extends Fragment {
+public class Fragment_Sign_Up extends Fragment {
 
     private FloatingActionButton fab;
     private SignInActivity activity;
-    private EditText edt_name,edt_email;
+    private EditText edt_name,edt_email,edt_phone,edt_password;
     private ImageView image_personal,image_icon1,image_back_photo;
     private LinearLayout ll_back;
     private final int IMG1=1;
@@ -49,8 +49,8 @@ public class Fragment_Complete_Profile extends Fragment {
         return view;
     }
 
-    public static Fragment_Complete_Profile newInstance(){
-        return new Fragment_Complete_Profile();
+    public static Fragment_Sign_Up newInstance(){
+        return new Fragment_Sign_Up();
     }
     private void initView(View view) {
 
@@ -60,6 +60,9 @@ public class Fragment_Complete_Profile extends Fragment {
         edt_name = view.findViewById(R.id.edt_name);
 
         edt_email =view.findViewById(R.id.edt_email);
+        edt_phone =view.findViewById(R.id.edt_phone);
+        edt_password =view.findViewById(R.id.edt_password);
+
         image_personal = view.findViewById(R.id.image_personal);
         image_icon1 = view.findViewById(R.id.image_icon1);
         image_back_photo = view.findViewById(R.id.image_back_photo);
@@ -104,12 +107,16 @@ public class Fragment_Complete_Profile extends Fragment {
     {
         String m_name = edt_name.getText().toString().trim();
         String m_email = edt_email.getText().toString().trim();
-
+        String m_phone = edt_phone.getText().toString().trim();
+        String m_password = edt_password.getText().toString().trim();
 
         if (!TextUtils.isEmpty(m_name)&&
                 !TextUtils.isEmpty(m_email)&&
                 Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&
-                uri!=null
+                !TextUtils.isEmpty(m_phone)&&
+                m_phone.length() >=6&&
+                m_phone.length() <13&&
+                !TextUtils.isEmpty(m_password)
 
 
                 )
@@ -117,8 +124,18 @@ public class Fragment_Complete_Profile extends Fragment {
             Common.CloseKeyBoard(activity,edt_name);
             edt_name.setError(null);
             edt_email.setError(null);
+            edt_phone.setError(null);
+            edt_password.setError(null);
 
-            activity.signUp(m_name,m_email,uri);
+            if (uri==null)
+            {
+                activity.signUpWithoutImage(m_name,m_email,m_phone,m_password);
+
+            }else
+                {
+                    activity.signUpWithImage(m_name,m_email,m_phone,m_password,uri);
+
+                }
 
         }else
         {
@@ -144,10 +161,29 @@ public class Fragment_Complete_Profile extends Fragment {
 
             }
 
-            if (uri == null)
+
+            if (TextUtils.isEmpty(m_phone))
             {
-                Toast.makeText(activity,getString(R.string.pers_photo_req), Toast.LENGTH_SHORT).show();
+                edt_phone.setError(getString(R.string.field_req));
+            }else if (m_phone.length()<6||m_phone.length()>=13)
+            {
+                edt_phone.setError(getString(R.string.inv_phone));
             }
+            else
+            {
+                edt_phone.setError(null);
+
+            }
+
+            if (TextUtils.isEmpty(m_password))
+            {
+                edt_password.setError(getString(R.string.field_req));
+            }else
+            {
+                edt_password.setError(null);
+
+            }
+
         }
     }
 

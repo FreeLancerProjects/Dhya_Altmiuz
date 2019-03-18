@@ -18,8 +18,11 @@ public class TrainingDataModel implements Serializable {
     public class TrainingModel implements Serializable
     {
         private int id;
+        private String title_ar;
+        private String title_en;
         private String destination_name_ar;
         private String destination_name_en;
+
         private String description_ar;
         private String description_en;
         private double sale_price;
@@ -31,6 +34,14 @@ public class TrainingDataModel implements Serializable {
 
         public int getId() {
             return id;
+        }
+
+        public String getTitle_ar() {
+            return title_ar;
+        }
+
+        public String getTitle_en() {
+            return title_en;
         }
 
         public String getDestination_name_ar() {
@@ -71,6 +82,10 @@ public class TrainingDataModel implements Serializable {
 
         public long getCreated_at() {
             return created_at;
+        }
+
+        public void setUser_registered(int user_registered) {
+            this.user_registered = user_registered;
         }
     }
 

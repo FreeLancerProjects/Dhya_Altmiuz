@@ -8,21 +8,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.appzone.dhai.adapters.OrderAdapter;
 import com.appzone.dhai.models.OrderDataModel;
 import com.appzone.dhai.models.UserModel;
+import com.appzone.dhai.remote.Api;
 import com.appzone.dhai.singletone.UserSingleTone;
+import com.appzone.dhai.tags.Tags;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment_Previous_Orders extends Fragment{
     private RecyclerView recView;
@@ -83,11 +92,12 @@ public class Fragment_Previous_Orders extends Fragment{
 
                         isLoading = true;
                         int nextPageIndex = current_page+1;
+                        loadMore(nextPageIndex);
                     }
                 }
             }
         });
-        //getOrders();
+        getOrders();
     }
     public void NotifyAdapterChangeTime()
     {
@@ -97,10 +107,10 @@ public class Fragment_Previous_Orders extends Fragment{
         }
     }
 
-   /* public void getOrders()
+    public void getOrders()
     {
         Api.getService()
-                .getMyOrders(Tags.OLD_ORDER,userModel.getToken(),1)
+                .getOrders(userModel.getToken(), Tags.ORDER_OLD,1)
                 .enqueue(new Callback<OrderDataModel>() {
                     @Override
                     public void onResponse(Call<OrderDataModel> call, Response<OrderDataModel> response) {
@@ -145,17 +155,15 @@ public class Fragment_Previous_Orders extends Fragment{
                 });
     }
 
-    private void loadMore(int page_index)
-    {
+    private void loadMore(int page_index) {
         Api.getService()
-                .getMyOrders(Tags.OLD_ORDER,userModel.getToken(),page_index)
+                .getOrders(userModel.getToken(),Tags.ORDER_OLD,page_index)
                 .enqueue(new Callback<OrderDataModel>() {
                     @Override
                     public void onResponse(Call<OrderDataModel> call, Response<OrderDataModel> response) {
 
                         if (response.isSuccessful()&& response.body()!=null)
                         {
-                            progBarLoadMore.setVisibility(View.GONE);
                             orderModelList.addAll(response.body().getData());
                             adapter.notifyDataSetChanged();
                             isLoading = false;
@@ -163,7 +171,6 @@ public class Fragment_Previous_Orders extends Fragment{
 
                         }else
                         {
-                            progBarLoadMore.setVisibility(View.GONE);
                             Toast.makeText(activity,getString(R.string.failed), Toast.LENGTH_LONG).show();
 
                             try {
@@ -178,17 +185,10 @@ public class Fragment_Previous_Orders extends Fragment{
                     public void onFailure(Call<OrderDataModel> call, Throwable t) {
                         try {
 
-                            progBarLoadMore.setVisibility(View.GONE);
                             Toast.makeText(activity,getString(R.string.something), Toast.LENGTH_LONG).show();
                             Log.e("Error",t.getMessage());
                         }catch (Exception e){}
                     }
                 });
     }
-
-
-    public void setItemData(OrderDataModel.OrderModel orderModel) {
-        activity.DisplayFragmentOrderDetails(orderModel);
-
-    }*/
 }

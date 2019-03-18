@@ -206,6 +206,7 @@ public class Fragment_Notifications extends Fragment {
 
     public void AddNewNotification(NotificationModel notificationModel)
     {
+        ll_no_not.setVisibility(View.GONE);
         notificationModelList.add(0,notificationModel);
         notificationAdapter.notifyDataSetChanged();
     }

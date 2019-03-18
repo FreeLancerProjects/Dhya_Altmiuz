@@ -1,76 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="5dp"
-    app:cardBackgroundColor="@color/white"
-    android:layout_marginBottom="5dp"
+    android:padding="8dp"
+    android:background="@drawable/job_row_bg"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-
+    android:layout_marginTop="5dp"
     >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:maxLines="2"
-            android:gravity="end|center_horizontal"
-            />
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:maxLines="2"
-            />
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="15sp"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        android:text="ssss"
+        />
 
-            >
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
+    <TextView
+        android:id="@+id/tv_year"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_date"
+        android:textSize="15sp"
+        android:textColor="@color/gray4"
+        android:gravity="center"
 
-                />
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/avLoadingIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:indicatorName="BallClipRotateIndicator"
-                app:indicatorColor="@color/colorPrimary"
-                />
-        </FrameLayout>
+        />
 
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:maxLines="2"
-            android:layout_marginBottom="5dp"
 
-            />
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+    <ImageView
+        android:id="@+id/online"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:layout_constraintStart_toEndOf="@id/tv_date"
+        app:layout_constraintTop_toTopOf="@id/tv_date"
+        app:layout_constraintBottom_toBottomOf="@id/tv_date"
+        android:src="@drawable/online_bg"
+
+        />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/online"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/gray5"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:ignore="RtlCompat"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintHorizontal_bias="0"
+        />
+
+    <TextView
+        android:id="@+id/tv_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/online"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        android:layout_marginStart="8dp"
+        android:textSize="13sp"
+        android:textColor="@color/gray"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlCompat"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintHorizontal_bias="0"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

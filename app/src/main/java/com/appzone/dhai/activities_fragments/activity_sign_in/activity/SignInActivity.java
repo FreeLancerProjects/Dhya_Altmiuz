@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
-import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Chooser;
-import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Complete_Profile;
+import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Sign_In;
+import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Sign_Up;
 import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Phone;
 import com.appzone.dhai.activities_fragments.activity_terms_conditions.TermsConditionsActivity;
 import com.appzone.dhai.models.UserModel;
@@ -39,10 +39,9 @@ public class SignInActivity extends AppCompatActivity {
     private View root;
     private Snackbar snackbar;
     private FragmentManager fragmentManager;
-    private Fragment_Chooser fragment_chooser;
+    private Fragment_Sign_In fragment_signIn;
     private Fragment_Phone fragment_phone;
-    private Fragment_Complete_Profile fragment_complete_profile;
-    public String phone="";
+    private Fragment_Sign_Up fragment_signUp;
 
 
     @Override
@@ -57,32 +56,39 @@ public class SignInActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         root = findViewById(R.id.root);
-        DisplayFragmentChooser();
+        DisplayFragmentSignIn();
 
 
 
 
     }
 
-    public void DisplayFragmentChooser()
+    public void DisplayFragmentSignIn()
     {
-        if (fragment_chooser==null)
+        if (fragment_signUp !=null&& fragment_signUp.isAdded())
         {
-            fragment_chooser = Fragment_Chooser.newInstance();
+            fragmentManager.beginTransaction().hide(fragment_signUp).commit();
         }
 
-        if (fragment_chooser.isAdded())
+        if (fragment_signIn ==null)
         {
-            fragmentManager.beginTransaction().show(fragment_chooser).commit();
+            fragment_signIn = Fragment_Sign_In.newInstance();
+        }
+
+        if (fragment_signIn.isAdded())
+        {
+            fragmentManager.beginTransaction().show(fragment_signIn).commit();
         }else
         {
-            fragmentManager.beginTransaction().add(R.id.fragment_sign_container,fragment_chooser,"fragment_chooser").addToBackStack("fragment_chooser").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_sign_container, fragment_signIn,"fragment_sign_in").addToBackStack("fragment_sign_in").commit();
         }
 
     }
 
     public void DisplayFragmentPhone()
     {
+
+
         if (fragment_phone==null)
         {
             fragment_phone = Fragment_Phone.newInstance();
@@ -98,21 +104,24 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public void DisplayFragmentCompleteProfile(String phone)
+    public void DisplayFragmentCompleteProfile()
     {
-        this.phone = phone;
 
-        if (fragment_complete_profile==null)
+        if (fragment_signIn!=null&&fragment_signIn.isAdded())
         {
-            fragment_complete_profile = Fragment_Complete_Profile.newInstance();
+            fragmentManager.beginTransaction().hide(fragment_signIn).commit();
+        }
+        if (fragment_signUp ==null)
+        {
+            fragment_signUp = Fragment_Sign_Up.newInstance();
         }
 
-        if (fragment_complete_profile.isAdded())
+        if (fragment_signUp.isAdded())
         {
-            fragmentManager.beginTransaction().show(fragment_complete_profile).commit();
+            fragmentManager.beginTransaction().show(fragment_signUp).commit();
         }else
         {
-            fragmentManager.beginTransaction().add(R.id.fragment_sign_container,fragment_complete_profile,"fragment_complete_profile").addToBackStack("fragment_complete_profile").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_sign_container, fragment_signUp,"fragment_signUp").addToBackStack("fragment_signUp").commit();
         }
 
     }
@@ -140,12 +149,12 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void signIn(final String phone)
+    public void signIn(String email,String password)
     {
         final Dialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.show();
         Api.getService()
-                .SignIn(phone)
+                .SignIn(email,password)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -174,7 +183,7 @@ public class SignInActivity extends AppCompatActivity {
 
                             if (response.code() == 402)
                             {
-                                DisplayFragmentCompleteProfile(phone);
+                                Common.CreateSignAlertDialog(SignInActivity.this,getString(R.string.inc_ph_pas));
                             }else
                             {
                                 CreateSnackBar(getString(R.string.failed));
@@ -200,7 +209,7 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void signUp(String name, String email, Uri avatar_uri)
+    public void signUpWithImage(String name, String email,String phone,String password, Uri avatar_uri)
     {
 
         final Dialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
@@ -209,11 +218,12 @@ public class SignInActivity extends AppCompatActivity {
         RequestBody name_part = Common.getRequestBodyText(name);
         RequestBody phone_part = Common.getRequestBodyText(phone);
         RequestBody email_part = Common.getRequestBodyText(email);
+        RequestBody password_part = Common.getRequestBodyText(password);
 
         try {
             MultipartBody.Part avatar_part = Common.getMultiPart(this,avatar_uri,"avatar");
             Api.getService()
-                    .SignUp(name_part,phone_part,email_part,avatar_part)
+                    .SignUpWithImage(name_part,phone_part,email_part,password_part,avatar_part)
                     .enqueue(new Callback<UserModel>() {
                         @Override
                         public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -238,7 +248,7 @@ public class SignInActivity extends AppCompatActivity {
 
                                 }else
                                 {
-                                    Common.CreateSignAlertDialog(SignInActivity.this,getString(R.string.something));
+                                    Common.CreateSignAlertDialog(SignInActivity.this,getString(R.string.failed));
                                 }
                             }else
                             {
@@ -277,6 +287,77 @@ public class SignInActivity extends AppCompatActivity {
 
         }
     }
+    public void signUpWithoutImage(String name, String email,String phone,String password)
+    {
+
+        final Dialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.show();
+
+        RequestBody name_part = Common.getRequestBodyText(name);
+        RequestBody phone_part = Common.getRequestBodyText(phone);
+        RequestBody email_part = Common.getRequestBodyText(email);
+        RequestBody password_part = Common.getRequestBodyText(password);
+
+        Api.getService()
+                .SignUpWithoutImage(name_part,phone_part,email_part,password_part)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+
+
+                        if (response.isSuccessful())
+                        {
+                            dialog.dismiss();
+                            DismissSnackBar();
+
+                            if (response.body()!=null)
+                            {
+                                UserSingleTone userSingleTone = UserSingleTone.getInstance();
+                                Preferences preferences = Preferences.getInstance();
+                                UserModel userModel = response.body();
+                                userSingleTone.setUserModel(userModel);
+                                preferences.create_update_userData(SignInActivity.this,userModel);
+
+                                NavigateToHomeActivity(false,true);
+
+
+
+                            }else
+                            {
+                                Common.CreateSignAlertDialog(SignInActivity.this,getString(R.string.failed));
+                            }
+                        }else
+                        {
+
+                            dialog.dismiss();
+
+                            if (response.code()==422)
+                            {
+                                Common.CreateSignAlertDialog(SignInActivity.this,getString(R.string.phone_number_exists));
+
+                            }else
+                            {
+                                CreateSnackBar(getString(R.string.failed));
+                            }
+
+                            try {
+                                Log.e("error_code",response.code()+"_"+response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            CreateSnackBar(getString(R.string.something));
+                            Log.e("Error",t.getMessage());
+                        }catch (Exception e){}
+                    }
+                });
+    }
     private void CreateSnackBar(String msg)
     {
         snackbar = Common.CreateSnackBar(this,root,msg);
@@ -313,14 +394,16 @@ public class SignInActivity extends AppCompatActivity {
 
     public void Back() {
 
-        String name = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
-        if (name.equals("fragment_chooser"))
+        if (fragment_signIn!=null&&fragment_signIn.isVisible())
         {
             finish();
         }else
-        {
-            super.onBackPressed();
-        }
+            {
+                if (fragment_signUp !=null&& fragment_signUp.isVisible())
+                {
+                    DisplayFragmentSignIn();
+                }
+            }
     }
 
     @Override

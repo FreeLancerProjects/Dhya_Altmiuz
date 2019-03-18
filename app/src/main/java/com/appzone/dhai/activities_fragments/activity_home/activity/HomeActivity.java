@@ -79,6 +79,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -129,7 +130,6 @@ public class HomeActivity extends AppCompatActivity {
     private Preferences preferences;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
-    private int training_id = -1;
     //////////////////////////////////////////////////
     private List<PackageDataModel.PackageModel> packageModelList;
     private PackageAdapter packageAdapter;
@@ -182,8 +182,13 @@ public class HomeActivity extends AppCompatActivity {
         DisplayFragmentHome();
         if (userModel!=null)
         {
+            if (!EventBus.getDefault().isRegistered(this))
+            {
+                EventBus.getDefault().register(this);
+            }
             UpdateToken();
             getUnreadNotificationCount();
+
         }
 
     }
@@ -206,6 +211,11 @@ public class HomeActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 DisplayFragmentNotifications();
+                                ReadNotification();
+                                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                if (manager != null) {
+                                    manager.cancelAll();
+                                }
                             }
                         }, 1);
             }
@@ -233,8 +243,8 @@ public class HomeActivity extends AppCompatActivity {
             builder.setSound(Uri.parse(sound_path));
             builder.setContentTitle(getString(R.string.welcome));
             builder.setContentText(getString(R.string.welcome_thank));
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-            builder.setSmallIcon(R.mipmap.ic_launcher);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+            builder.setSmallIcon(R.drawable.ic_notification_icon);
             builder.setLargeIcon(bitmap);
 
 
@@ -704,7 +714,7 @@ public class HomeActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_service_reserve, "fragment_service_reserve").addToBackStack("fragment_service_reserve").commit();
                 }
             } else {
-                getPackagesData();
+                createAlertForCharge();
             }
         }
 
@@ -723,7 +733,7 @@ public class HomeActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_electronic_service_reserve, "fragment_electronic_service_reserve").addToBackStack("fragment_electronic_service_reserve").commit();
                 }
             } else {
-                getPackagesData();
+                createAlertForCharge();
             }
         }
 
@@ -743,7 +753,7 @@ public class HomeActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_jobs_reserve, "fragment_jobs_reserve").addToBackStack("fragment_jobs_reserve").commit();
                 }
             } else {
-                getPackagesData();
+                createAlertForCharge();
             }
         }
 
@@ -775,7 +785,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void DisplayFragmentTrainingDetails(TrainingDataModel.TrainingModel trainingModel) {
-        this.training_id = trainingModel.getId();
         fragment_training_details = Fragment_Training_Details.newInstance(trainingModel);
 
         if (fragment_training_details.isAdded()) {
@@ -785,16 +794,29 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void DisplayFragmentTrainingRegister() {
-        if (fragment_training_register == null) {
-            fragment_training_register = Fragment_Training_Register.newInstance();
+    public void DisplayFragmentTrainingRegister(TrainingDataModel.TrainingModel trainingModel) {
+
+        if (userModel == null) {
+            CreateUserNotSignInAlertDialog();
+        } else {
+            if (userModel.getBalance() >= trainingModel.getSale_price()) {
+                if (fragment_training_register == null) {
+                    fragment_training_register = Fragment_Training_Register.newInstance(trainingModel);
+                }
+
+                if (fragment_training_register.isAdded()) {
+                    fragmentManager.beginTransaction().show(fragment_training_register).commit();
+                } else {
+                    fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_training_register, "fragment_reserve").addToBackStack("fragment_reserve").commit();
+                }
+            } else {
+                createAlertForCharge();
+            }
         }
 
-        if (fragment_training_register.isAdded()) {
-            fragmentManager.beginTransaction().show(fragment_training_register).commit();
-        } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_training_register, "fragment_reserve").addToBackStack("fragment_reserve").commit();
-        }
+
+
+
     }
 
     //////////////////////////////////////////////
@@ -821,7 +843,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     //////////////////////////////////////////////
-    public void trainingReserve(String m_name, String m_phone, String m_email, String m_add_info, String m_description, String m_notes) {
+    public void trainingReserve(int training_id,String m_name, String m_phone, String m_email, String m_add_info, String m_description, String m_notes) {
         final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.show();
         Api.getService()
@@ -832,8 +854,7 @@ public class HomeActivity extends AppCompatActivity {
                         if (response.isSuccessful())
                         {
                             dialog.dismiss();
-                            HomeActivity.this.training_id = -1;
-
+                            fragmentManager.popBackStack();
                             new Handler()
                                     .postDelayed(new Runnable() {
                                         @Override
@@ -852,6 +873,7 @@ public class HomeActivity extends AppCompatActivity {
                                     }, 1);
 
                             RefreshFragmentOrder();
+                            RefreshFragmentTrainingAdapter();
 
                         }else
                             {
@@ -893,7 +915,8 @@ public class HomeActivity extends AppCompatActivity {
                         if (response.isSuccessful())
                         {
                             dialog.dismiss();
-
+                            Toast.makeText(HomeActivity.this, getString(R.string.succ), Toast.LENGTH_SHORT).show();
+                            fragmentManager.popBackStack();
                             RefreshFragmentOrder();
 
 
@@ -936,7 +959,8 @@ public class HomeActivity extends AppCompatActivity {
                         if (response.isSuccessful())
                         {
                             dialog.dismiss();
-
+                            Toast.makeText(HomeActivity.this, getString(R.string.succ), Toast.LENGTH_SHORT).show();
+                            fragmentManager.popBackStack();
                             RefreshFragmentOrder();
 
 
@@ -994,6 +1018,8 @@ public class HomeActivity extends AppCompatActivity {
                                         }
                                     },1);
                             RefreshFragmentOrder();
+                            RefreshFragmentJobsAdapter();
+
 
 
                         }else
@@ -1045,6 +1071,8 @@ public class HomeActivity extends AppCompatActivity {
                                             }
                                         }
                                     },1);
+                            RefreshFragmentJobsAdapter();
+                            RefreshFragmentOrder();
 
                         }else
                         {
@@ -1083,6 +1111,33 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }, 1);
         }
+    }
+
+    private void RefreshFragmentTrainingAdapter()
+    {
+        new Handler()
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (fragment_training!=null&&fragment_training.isAdded())
+                        {
+                            fragment_training.RefreshAdapter();
+                        }
+                    }
+                },1);
+    }
+    private void RefreshFragmentJobsAdapter()
+    {
+        new Handler()
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (fragment_jobs!=null&&fragment_jobs.isAdded())
+                        {
+                            fragment_jobs.RefreshAdapter();
+                        }
+                    }
+                },1);
     }
 
     //////////////////////////////////////////////
@@ -1151,8 +1206,11 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void getPackagesData() {
-        if (packageModelList.size() > 0) {
+    public void createAlertForCharge() {
+
+        Common.CreateSignAlertDialog(this,"");
+
+      /*  if (packageModelList.size() > 0) {
             CreatePackageDialog(packageModelList);
         } else {
             final Dialog dialog = Common.getProgressDialog(this);
@@ -1194,7 +1252,7 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         }
                     });
-        }
+        }*/
 
     }
 
@@ -1299,6 +1357,7 @@ public class HomeActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ListenToAddNewNotification(final NotificationModel notificationModel)
     {
+        canRead = true;
         getUnreadNotificationCount();
 
         new Handler()
@@ -1319,14 +1378,26 @@ public class HomeActivity extends AppCompatActivity {
                         }else if (notificationModel.getType()==Tags.NOTIFICATION_ACCEPT_SERVICE)
                         {
                             RefreshFragmentOrder();
+                            if (fragment_profile!=null&&fragment_profile.isAdded())
+                            {
+                                fragment_profile.requestNewProfile();
+                            }
                         }
                         else if (notificationModel.getType()==Tags.NOTIFICATION_REFUSE_SERVICE)
                         {
                             RefreshFragmentOrder();
+                            if (fragment_profile!=null&&fragment_profile.isAdded())
+                            {
+                                fragment_profile.requestNewProfile();
+                            }
 
                         }else if (notificationModel.getType()==Tags.NOTIFICATION_FINISH_SERVICE)
                         {
                             RefreshFragmentOrder();
+                            if (fragment_profile!=null&&fragment_profile.isAdded())
+                            {
+                                fragment_profile.requestNewProfile();
+                            }
 
                         }
 
@@ -1503,6 +1574,12 @@ public class HomeActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+        {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

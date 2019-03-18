@@ -120,7 +120,7 @@ public class Fragment_Job_Details extends Fragment {
                         activity.jobReserveByPDF(jobsModel.getId(),cv_path);
                     }else
                     {
-                        activity.getPackagesData();
+                        activity.createAlertForCharge();
                     }
                 }
             }
@@ -169,7 +169,15 @@ public class Fragment_Job_Details extends Fragment {
     {
         if (jobsModel!=null)
         {
-            Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL)+jobsModel.getImage()).fit().into(image);
+            if (jobsModel.getImage()!=null)
+            {
+
+                Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL)+jobsModel.getImage()).fit().into(image);
+
+            }else
+                {
+                    image.setVisibility(View.GONE);
+                }
             SimpleDateFormat dateFormat ;
 
             if (current_language.equals("ar"))

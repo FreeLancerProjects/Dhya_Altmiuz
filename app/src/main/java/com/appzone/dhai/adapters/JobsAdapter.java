@@ -1,23 +1,17 @@
 package com.appzone.dhai.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.jobs.Fragment_Jobs;
 import com.appzone.dhai.models.JobsDataModel;
-import com.appzone.dhai.tags.Tags;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,7 +61,7 @@ public class JobsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     JobsDataModel.JobsModel jobsModel = jobsModelList.get(holder.getAdapterPosition());
-                    fragment.setItemData(jobsModel);
+                    fragment.setItemData(jobsModel,holder.getAdapterPosition());
                 }
             });
 
@@ -85,49 +79,41 @@ public class JobsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
-        private ImageView image;
-        private TextView tv_name,tv_description,tv_date;
-        private AVLoadingIndicatorView avLoadingIndicator;
+        private TextView tv_title,tv_details,tv_date,tv_year;
 
         public MyHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.image);
-            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_title = itemView.findViewById(R.id.tv_title);
             tv_date = itemView.findViewById(R.id.tv_date);
-            tv_description = itemView.findViewById(R.id.tv_description);
-            avLoadingIndicator = itemView.findViewById(R.id.avLoadingIndicator);
-            avLoadingIndicator.smoothToShow();
+            tv_year = itemView.findViewById(R.id.tv_year);
+            tv_details = itemView.findViewById(R.id.tv_details);
+
         }
 
         public void BindData(JobsDataModel.JobsModel jobsModel)
         {
-            SimpleDateFormat dateFormat ;
+            SimpleDateFormat dateFormat_date,dateFormat_year ;
+            dateFormat_year = new SimpleDateFormat("yyyy",Locale.getDefault());
 
             if (Locale.getDefault().getLanguage().equals("ar"))
             {
-                tv_name.setText(jobsModel.getTitle_ar());
-                tv_description.setText(jobsModel.getDescription_ar());
-                dateFormat = new SimpleDateFormat("yyyy/MM/dd",Locale.getDefault());
+                tv_title.setText(jobsModel.getTitle_ar());
+                tv_details.setText(jobsModel.getDescription_ar());
+                dateFormat_date = new SimpleDateFormat("MM/dd",Locale.getDefault());
+
             }else
                 {
-                    tv_name.setText(jobsModel.getTitle_en());
-                    tv_description.setText(jobsModel.getDescription_en());
-                    dateFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault());
+                    tv_title.setText(jobsModel.getTitle_en());
+                    tv_details.setText(jobsModel.getDescription_en());
+                    dateFormat_date = new SimpleDateFormat("dd/MM",Locale.getDefault());
+
                 }
-            String date = dateFormat.format(new Date(jobsModel.getCreated_at()*1000));
+            String date = dateFormat_date.format(new Date(jobsModel.getCreated_at()*1000));
+            String year = dateFormat_year.format(new Date(jobsModel.getCreated_at()*1000));
+            tv_year.setText(year);
             tv_date.setText(date);
 
-            Picasso.with(context).load(Uri.parse(Tags.IMAGE_URL+jobsModel.getImage())).fit().into(image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    avLoadingIndicator.smoothToHide();
-                }
 
-                @Override
-                public void onError() {
-
-                }
-            });
         }
     }
 

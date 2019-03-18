@@ -65,11 +65,11 @@ public class Fragment_Orders extends Fragment {
     public void RefreshFragments()
     {
         Fragment_New_Orders fragment_new_orders = (Fragment_New_Orders) adapter.getItem(0);
-        //fragment_new_orders.getOrders();
+        fragment_new_orders.getOrders();
         Fragment_Current_Orders fragment_current_orders = (Fragment_Current_Orders) adapter.getItem(1);
-        //fragment_current_orders.getOrders();
+        fragment_current_orders.getOrders();
         Fragment_Previous_Orders fragment_previous_orders = (Fragment_Previous_Orders) adapter.getItem(2);
-        //fragment_previous_orders.getOrders();
+        fragment_previous_orders.getOrders();
     }
 
     public void RefreshTime()

@@ -30,6 +30,16 @@
             android:layout_marginTop="5dp"
             />
 
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            />
+
         <Button
             android:id="@+id/btn_reserve"
             android:layout_width="120dp"
