@@ -1,5 +1,6 @@
 package com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.jobs;
 
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,12 +21,14 @@ import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
 import com.appzone.dhai.models.JobsDataModel;
 import com.appzone.dhai.models.UserModel;
+import com.appzone.dhai.share.Common;
 import com.appzone.dhai.singletone.UserSingleTone;
 import com.appzone.dhai.tags.Tags;
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -38,7 +41,8 @@ import java.util.Locale;
 public class Fragment_Job_Details extends Fragment {
     private final static String TAG = "DATA";
     private ImageView image;
-    private TextView tv_name,tv_details,tv_date,tv_address,tv_file_path,tv_data;
+    private TextView tv_name,tv_details,tv_date,tv_address,tv_data;
+    private ImageView image_cv;
     private LinearLayout ll_register;
     private FrameLayout fl_cv;
     private Button btn_register,btn_upload_cv;
@@ -50,6 +54,7 @@ public class Fragment_Job_Details extends Fragment {
     private UserModel userModel;
     private FilePickerDialog filePickerDialog;
     private String cv_path="";
+
 
     public static Fragment_Job_Details newInstance(JobsDataModel.JobsModel jobsModel)
     {
@@ -81,7 +86,7 @@ public class Fragment_Job_Details extends Fragment {
         tv_data = view.findViewById(R.id.tv_data);
         fl_cv = view.findViewById(R.id.fl_cv);
         ll_register = view.findViewById(R.id.ll_register);
-        tv_file_path = view.findViewById(R.id.tv_file_path);
+        image_cv = view.findViewById(R.id.image_cv);
         btn_upload_cv = view.findViewById(R.id.btn_upload_cv);
         expand_layout = view.findViewById(R.id.expand_layout);
 
@@ -103,7 +108,29 @@ public class Fragment_Job_Details extends Fragment {
                 {
                     expand_layout.collapse(true);
                 }
-                openPdfFile();
+
+                if (userModel.getImage_cv()!=null)
+                {
+                  final ProgressDialog dialog =  Common.createProgressDialog(activity,getString(R.string.wait));
+                  dialog.show();
+                  Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL+userModel.getImage_cv())).fit().into(image_cv, new Callback() {
+                      @Override
+                      public void onSuccess() {
+                          dialog.dismiss();
+                          expand_layout.expand(true);
+                      }
+
+                      @Override
+                      public void onError() {
+
+                      }
+                  });
+                }else
+                    {
+                        Common.CreateSignAlertDialog(activity,getString(R.string.up_cv_prof));
+                    }
+
+                //openPdfFile();
             }
         });
 
@@ -117,7 +144,7 @@ public class Fragment_Job_Details extends Fragment {
 
                     if (jobsModel.getSale_price()<=userModel.getBalance())
                     {
-                        activity.jobReserveByPDF(jobsModel.getId(),cv_path);
+                        activity.jobReserveByPDF(jobsModel.getId());
                     }else
                     {
                         activity.createAlertForCharge();
@@ -155,7 +182,7 @@ public class Fragment_Job_Details extends Fragment {
                 {
                     cv_path = path;
                     File file = new File(path);
-                    tv_file_path.setText(file.getName());
+                    //tv_file_path.setText(file.getName());
                     expand_layout.expand(true);
 
                 }

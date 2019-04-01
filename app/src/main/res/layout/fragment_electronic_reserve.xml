@@ -132,7 +132,9 @@
             android:background="@drawable/edt_sign_up_bg"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:visibility="gone"
+            >
 
             <ImageView
                 android:layout_width="50dp"
@@ -166,6 +168,8 @@
             android:background="@drawable/edt_sign_up_bg"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
+            android:visibility="gone"
+
 
             >
             <ImageView
@@ -215,6 +219,8 @@
             android:background="@drawable/edt_sign_up_bg"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
+            android:visibility="gone"
+
 
             >
             <ImageView

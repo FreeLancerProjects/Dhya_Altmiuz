@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appzone.dhai.R;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_main.Fragment_Notifications;
 import com.appzone.dhai.models.NotificationModel;
 import com.appzone.dhai.share.TimeAgo;
 import com.appzone.dhai.tags.Tags;
@@ -26,11 +27,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<NotificationModel> notificationModelList;
     private Context context;
     private TimeAgo timeAgo;
-
-    public NotificationAdapter(List<NotificationModel> notificationModelList, Context context) {
+    private Fragment_Notifications fragment_notifications;
+    public NotificationAdapter(List<NotificationModel> notificationModelList, Context context, Fragment_Notifications fragment_notifications) {
         this.notificationModelList = notificationModelList;
         this.context = context;
+        this.fragment_notifications = fragment_notifications;
         timeAgo = TimeAgo.newInstance();
+
     }
 
     @NonNull
@@ -50,13 +53,27 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof MyHolder)
         {
-            NotificationModel notificationModel = notificationModelList.get(holder.getAdapterPosition());
+            final NotificationModel notificationModel = notificationModelList.get(holder.getAdapterPosition());
             MyHolder myHolder = (MyHolder) holder;
             myHolder.BindData(notificationModel);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NotificationModel notificationModel = notificationModelList.get(holder.getAdapterPosition());
+
+                    if (notificationModel.getType()==Tags.NOTIFICATION_DATA)
+                    {
+                        fragment_notifications.setItemData(notificationModel);
+                    }
+                }
+            });
+
+
         }else
             {
                 ProgressHolder progressHolder = (ProgressHolder) holder;
@@ -90,6 +107,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             {
                 tv_content.setText(context.getString(R.string.accepted)+" "+context.getString(R.string.package_1)+" "+" "+notificationModel.getService_title_ar()+" "+context.getString(R.string.rsa));
                 image_state.setImageResource(R.drawable.dollar);
+
 
             }else if (notificationModel.getType()==Tags.NOTIFICATION_REFUSE_CHARGE)
             {
@@ -131,6 +149,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }else
                 {
                     tv_content.setText(context.getString(R.string.finished)+" "+notificationModel.getService_title_en());
+
+                }
+            }else if (notificationModel.getType()==Tags.NOTIFICATION_DATA)
+            {
+                image_state.setImageResource(R.drawable.add_info);
+
+                if (Locale.getDefault().getLanguage().equals("ar"))
+                {
+                    tv_content.setText(notificationModel.getService_title_ar()+" "+context.getString(R.string.add_info_req));
+
+                }else
+                {
+                    tv_content.setText(notificationModel.getService_title_en()+" "+context.getString(R.string.add_info_req));
 
                 }
             }

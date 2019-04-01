@@ -55,15 +55,16 @@ public class Fragment_Profile extends Fragment {
     private AppBarLayout appBar;
     private CircleImageView image;
     private TextView tv_name,tv_email,tv_balance;
-    private ImageView arrow1,arrow2,arrow3,arrow4;
-    private LinearLayout ll_name,ll_email,ll_logout,ll_charge;
+    private ImageView arrow1,arrow2,arrow3,arrow4,image_cv;
+    private LinearLayout ll_name,ll_email,ll_logout,ll_charge,ll_cv;
     private String current_language;
     private HomeActivity activity;
     private UserSingleTone userSingleTone;
     private UserModel userModel;
-    private final int IMG1=1;
+    private final int IMG1=1,IMG2=2;
     private Uri uri=null;
     private final String read_permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private Uri cv_uri=null;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,6 +117,8 @@ public class Fragment_Profile extends Fragment {
         ll_email = view.findViewById(R.id.ll_email);
         ll_logout = view.findViewById(R.id.ll_logout);
         ll_charge = view.findViewById(R.id.ll_charge);
+        ll_cv = view.findViewById(R.id.ll_cv);
+        image_cv = view.findViewById(R.id.image_cv);
 
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -139,6 +142,13 @@ public class Fragment_Profile extends Fragment {
                 Check_ReadPermission(IMG1);
             }
         });
+        ll_cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Check_ReadPermission(IMG2);
+            }
+        });
+
         ll_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +191,12 @@ public class Fragment_Profile extends Fragment {
             }else
                 {
                     image.setImageResource(R.drawable.user_profile);
+                }
+
+                if (userModel.getImage_cv()!=null)
+                {
+                    Picasso.with(activity).load(Tags.IMAGE_URL+userModel.getImage_cv()).fit().into(image_cv);
+
                 }
 
             tv_name.setText(userModel.getName());
@@ -498,6 +514,75 @@ public class Fragment_Profile extends Fragment {
         updateUI(userModel);
         activity.updateUserData(userModel);
     }
+    private void uploadCV(Uri cv_uri) {
+
+        final Dialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+        dialog.show();
+
+        RequestBody token_part = Common.getRequestBodyText(userModel.getToken());
+
+
+        try {
+            MultipartBody.Part avatar_part = Common.getMultiPart(activity,cv_uri,"image_cv");
+            Api.getService()
+                    .updateImage(token_part,avatar_part)
+                    .enqueue(new Callback<UserModel>() {
+                        @Override
+                        public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+
+
+                            if (response.isSuccessful())
+                            {
+                                dialog.dismiss();
+
+                                if (response.body()!=null)
+                                {
+                                    Toast.makeText(activity, getString(R.string.succ), Toast.LENGTH_SHORT).show();
+                                    UpdateUserData(response.body());
+
+
+
+                                }else
+                                {
+                                    Common.CreateSignAlertDialog(activity,getString(R.string.something));
+                                }
+                            }else
+                            {
+
+                                dialog.dismiss();
+
+                                if (response.code()==422)
+                                {
+                                    Common.CreateSignAlertDialog(activity,getString(R.string.phone_number_exists));
+
+                                }else
+                                {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+
+                                try {
+                                    Log.e("error_code",response.code()+"_"+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserModel> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                Log.e("Error",t.getMessage());
+                            }catch (Exception e){}
+                        }
+                    });
+        }catch (Exception e)
+        {
+            Toast.makeText(activity, R.string.inc_img_path, Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -507,8 +592,14 @@ public class Fragment_Profile extends Fragment {
             uri = data.getData();
 
             UpdateImage(uri);
+        }else if (requestCode == IMG2 && resultCode == Activity.RESULT_OK && data!=null)
+        {
+            cv_uri = data.getData();
+            uploadCV(cv_uri);
         }
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -520,6 +611,18 @@ public class Fragment_Profile extends Fragment {
                 if (grantResults[0]==PackageManager.PERMISSION_GRANTED)
                 {
                     select_photo(IMG1);
+                }else
+                {
+                    Toast.makeText(activity,getString(R.string.perm_image_denied), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }else if (requestCode == IMG2)
+        {
+            if (grantResults.length>0)
+            {
+                if (grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                {
+                    select_photo(IMG2);
                 }else
                 {
                     Toast.makeText(activity,getString(R.string.perm_image_denied), Toast.LENGTH_SHORT).show();

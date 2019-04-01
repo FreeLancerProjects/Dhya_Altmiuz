@@ -85,7 +85,15 @@ public class FireBaseNotificationMessaging extends FirebaseMessagingService {
         long created_at = Long.parseLong(map.get("created_at"));
         int receiver_id = Integer.parseInt(map.get("receiver_id"));
 
-        NotificationModel notificationModel = new NotificationModel(service_id,service_title_ar,service_title_en,created_at,type,receiver_id);
+        String needed = "";
+        int msg_id = 0;
+        if (map.get("needed")!=null&&map.get("msg_id")!=null)
+        {
+            needed = map.get("needed");
+            msg_id = Integer.parseInt(map.get("msg_id"));
+        }
+
+        NotificationModel notificationModel = new NotificationModel(service_id,service_title_ar,service_title_en,created_at,type,receiver_id,needed,msg_id);
         String CHANNEL_ID = "my_channel_01";
         CharSequence CHANNEL_NAME = "channel_name";
         int IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
@@ -108,8 +116,18 @@ public class FireBaseNotificationMessaging extends FirebaseMessagingService {
         builder.setColor(ContextCompat.getColor(this,R.color.colorPrimary));
         builder.setColorized(true);
 
+
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        if (type == Tags.NOTIFICATION_DATA)
+        {
+            intent.putExtra("needed",needed);
+            intent.putExtra("msg_id",msg_id);
+            intent.putExtra("title_ar",service_title_ar);
+            intent.putExtra("title_en",service_title_en);
+        }
+
         intent.putExtra("status",type);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
@@ -185,7 +203,16 @@ public class FireBaseNotificationMessaging extends FirebaseMessagingService {
         long created_at = Long.parseLong(map.get("created_at"));
         int receiver_id = Integer.parseInt(map.get("receiver_id"));
 
-        NotificationModel notificationModel = new NotificationModel(service_id,service_title_ar,service_title_en,created_at,type,receiver_id);
+        String needed = "";
+        int msg_id = 0;
+        if (map.get("needed")!=null&&map.get("msg_id")!=null)
+        {
+            needed = map.get("needed");
+            msg_id = Integer.parseInt(map.get("msg_id"));
+        }
+
+
+        NotificationModel notificationModel = new NotificationModel(service_id,service_title_ar,service_title_en,created_at,type,receiver_id,needed,msg_id);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSound(Uri.parse(sound_path));
@@ -196,8 +223,17 @@ public class FireBaseNotificationMessaging extends FirebaseMessagingService {
         builder.setColor(ContextCompat.getColor(this,R.color.colorPrimary));
         builder.setColorized(true);
 
-        Intent intent = new Intent();
+        Intent intent = new Intent(this,HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        if (type == Tags.NOTIFICATION_DATA)
+        {
+            intent.putExtra("needed",needed);
+            intent.putExtra("msg_id",msg_id);
+            intent.putExtra("title_ar",service_title_ar);
+            intent.putExtra("title_en",service_title_en);
+        }
+
         intent.putExtra("status",type);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

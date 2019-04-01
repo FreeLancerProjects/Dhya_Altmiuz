@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.activity.HomeActivity;
+import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Forget_Password;
 import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Sign_In;
 import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Sign_Up;
 import com.appzone.dhai.activities_fragments.activity_sign_in.fragment.Fragment_Phone;
@@ -42,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     private Fragment_Sign_In fragment_signIn;
     private Fragment_Phone fragment_phone;
     private Fragment_Sign_Up fragment_signUp;
+    private Fragment_Forget_Password fragment_forget_password;
 
 
     @Override
@@ -122,6 +124,29 @@ public class SignInActivity extends AppCompatActivity {
         }else
         {
             fragmentManager.beginTransaction().add(R.id.fragment_sign_container, fragment_signUp,"fragment_signUp").addToBackStack("fragment_signUp").commit();
+        }
+
+    }
+
+    public void DisplayFragmentForgetPassword()
+    {
+
+        if (fragment_signIn !=null&& fragment_signIn.isAdded())
+        {
+            fragmentManager.beginTransaction().hide(fragment_signIn).commit();
+        }
+
+        if (fragment_forget_password==null)
+        {
+            fragment_forget_password = Fragment_Forget_Password.newInstance();
+        }
+
+        if (fragment_forget_password.isAdded())
+        {
+            fragmentManager.beginTransaction().show(fragment_forget_password).commit();
+        }else
+        {
+            fragmentManager.beginTransaction().add(R.id.fragment_sign_container,fragment_forget_password,"fragment_forget_password").addToBackStack("fragment_forget_password").commit();
         }
 
     }
@@ -399,7 +424,13 @@ public class SignInActivity extends AppCompatActivity {
             finish();
         }else
             {
-                if (fragment_signUp !=null&& fragment_signUp.isVisible())
+
+                if (fragment_forget_password!=null&&fragment_forget_password.isVisible())
+                {
+                    fragmentManager.popBackStack("fragment_forget_password",FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    DisplayFragmentSignIn();
+                }
+                else if (fragment_signUp !=null&& fragment_signUp.isVisible())
                 {
                     DisplayFragmentSignIn();
                 }

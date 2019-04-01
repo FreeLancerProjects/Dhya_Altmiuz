@@ -90,7 +90,7 @@
     <string name="start">البدء</string>
     <string name="end_time">الانتهاء</string>
     <string name="register">تسجيل</string>
-    <string name="additional_information">معلومات إضافية (إختياري)</string>
+    <string name="additional_information">المعلومات المطلوب إدخالها للخدمة</string>
     <string name="notes_optional">ملاحظات (إختياري)</string>
     <string name="details_optinal">وصف (إختياري)</string>
     <string name="charge_package">باقات الشحن</string>
@@ -132,11 +132,19 @@
     <string name="package_1">باقة بقيمة</string>
     <string name="organization">إسم الجهة</string>
     <string name="phone_number">رقم الجوال</string>
-    <string name="inc_ph_pas">رقم الجوال او كلمة المرور خاطئة</string>
+    <string name="inc_ph_pas">البريد الإلكتروني او كلمة المرور خاطئة</string>
     <string name="recharge_code">شحن رصيد</string>
     <string name="code">كود الشحن</string>
     <string name="charge2">شحن الرصيد</string>
     <string name="inc_code">الكود غير صحيح</string>
+    <string name="no_enough_ch">لا يوجد لديك رصيد كافي لحجز هذه الخدمة</string>
+    <string name="forget_password">نسيت كلمة المرور ؟</string>
+    <string name="we_will_send_you_a_link_to_on_the_email_recover_your_password">سنرسل لك رابطا على البريد الالكتروني الخاص بك لإستعادة كلمة المرور</string>
+    <string name="recover_password">إستعادة كلمة المرور</string>
+    <string name="inc_em">عفوا لم يتم التسجيل بهذا الميل من قبل</string>
+    <string name="cv">السيرة الذاتية</string>
+    <string name="up_cv_prof">من فضلك قم برفع السيرة الذاتية في الملف الشخصي.</string>
+    <string name="add_info_req">بيانات إضافية مطلوبة</string>
 
     <string-array name="spinner_qualification">
         <item>-إختر-</item>

@@ -70,7 +70,7 @@ public class Fragment_Notifications extends Fragment {
         recView = view.findViewById(R.id.recView);
         manager = new LinearLayoutManager(activity);
         recView.setLayoutManager(manager);
-        notificationAdapter = new NotificationAdapter(notificationModelList,activity);
+        notificationAdapter = new NotificationAdapter(notificationModelList,activity,this);
         recView.setAdapter(notificationAdapter);
         recView.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
@@ -209,5 +209,9 @@ public class Fragment_Notifications extends Fragment {
         ll_no_not.setVisibility(View.GONE);
         notificationModelList.add(0,notificationModel);
         notificationAdapter.notifyDataSetChanged();
+    }
+
+    public void setItemData(NotificationModel notificationModel) {
+        activity.DisplayFragmentAdditonalData(notificationModel.getMsg_id(),notificationModel.getNeeded(),notificationModel.getService_title_ar(),notificationModel.getService_title_en());
     }
 }

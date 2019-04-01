@@ -18,7 +18,7 @@ import com.appzone.dhai.share.Common;
 
 
 public class Fragment_Sign_In extends Fragment {
-    private Button btn_skip, btn_terms, btn_sign_in, btn_sign_up;
+    private Button btn_skip, btn_terms, btn_sign_in, btn_sign_up,btn_forget_password;
     private EditText edt_email, edt_password;
     private SignInActivity activity;
 
@@ -38,6 +38,8 @@ public class Fragment_Sign_In extends Fragment {
         activity = (SignInActivity) getActivity();
         edt_email = view.findViewById(R.id.edt_email);
         edt_password = view.findViewById(R.id.edt_password);
+
+        btn_forget_password = view.findViewById(R.id.btn_forget_password);
 
         btn_skip = view.findViewById(R.id.btn_skip);
         btn_terms = view.findViewById(R.id.btn_terms);
@@ -70,6 +72,13 @@ public class Fragment_Sign_In extends Fragment {
             @Override
             public void onClick(View v) {
                 activity.NavigateToTermsActivity();
+            }
+        });
+
+        btn_forget_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.DisplayFragmentForgetPassword();
             }
         });
     }

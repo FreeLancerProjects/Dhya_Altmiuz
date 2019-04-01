@@ -9,6 +9,7 @@ public class UserModel implements Serializable {
     private String name;
     private String email;
     private String avatar;
+    private String image_cv;
     private String phone;
     private String fire_base_token;
     private double balance;
@@ -44,5 +45,9 @@ public class UserModel implements Serializable {
 
     public double getBalance() {
         return balance;
+    }
+
+    public String getImage_cv() {
+        return image_cv;
     }
 }

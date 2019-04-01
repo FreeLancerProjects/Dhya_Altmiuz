@@ -12,6 +12,7 @@ public class Tags {
     public static final int NOTIFICATION_ACCEPT_SERVICE =3;
     public static final int NOTIFICATION_REFUSE_SERVICE =4;
     public static final int NOTIFICATION_FINISH_SERVICE =5;
+    public static final int NOTIFICATION_DATA =10;
 
     public static final String ORDER_NEW = "new";
     public static final String ORDER_CURRENT= "current";

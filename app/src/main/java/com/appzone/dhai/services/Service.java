@@ -182,8 +182,7 @@ public interface Service {
     @Multipart
     @POST("/api/reserve-job")
     Call<ResponseBody> jobPDFReserve(@Part("token") RequestBody user_token,
-                                     @Part("job_id") RequestBody job_id,
-                                     @Part MultipartBody.Part pdf
+                                     @Part("job_id") RequestBody job_id
     );
 
     @GET("/api/notifications")
@@ -212,4 +211,12 @@ public interface Service {
     @POST("/api/disable-coupon")
     Call<ResponseBody> chargeCoupon(@Field("code") String code,
                                     @Field("token") String user_token);
+
+    @FormUrlEncoded
+    @POST("/api/forget")
+    Call<ResponseBody> forgetPassword(@Field("email") String  email);
+
+    @FormUrlEncoded
+    @POST("/api/answer-notification")
+    Call<ResponseBody> sendAnswer(@Field("answer") String answer,@Field("msg_id") int msg_id);
 }

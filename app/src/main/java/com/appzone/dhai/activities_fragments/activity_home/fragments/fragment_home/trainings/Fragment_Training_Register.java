@@ -99,7 +99,8 @@ public class Fragment_Training_Register extends Fragment {
                 !TextUtils.isEmpty(m_phone)&&
                 m_phone.length()==9&&
                 !TextUtils.isEmpty(m_email)&&
-                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()
+                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&
+                !TextUtils.isEmpty(m_add_info)
                 )
         {
             Common.CloseKeyBoard(activity,edt_name);
@@ -109,6 +110,7 @@ public class Fragment_Training_Register extends Fragment {
             edt_additional_info.setError(null);
             edt_description.setError(null);
             edt_notes.setError(null);
+            edt_additional_info.setError(null);
             activity.trainingReserve(trainingModel.getId(),m_name,m_phone,m_email,m_add_info,m_description,m_notes);
 
         }else
@@ -142,6 +144,14 @@ public class Fragment_Training_Register extends Fragment {
                 else
                 {
                     edt_email.setError(null);
+                }
+
+                if (TextUtils.isEmpty(m_add_info))
+                {
+                    edt_additional_info.setError(getString(R.string.field_req));
+                }else
+                {
+                    edt_additional_info.setError(null);
                 }
 
 

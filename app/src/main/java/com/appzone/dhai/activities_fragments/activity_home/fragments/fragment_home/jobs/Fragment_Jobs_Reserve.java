@@ -136,7 +136,8 @@ public class Fragment_Jobs_Reserve extends Fragment {
                 Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&
                 !TextUtils.isEmpty(card_id)&&
                 !TextUtils.isEmpty(m_address)&&
-                !TextUtils.isEmpty(qualification)
+                !TextUtils.isEmpty(qualification)&&
+                !TextUtils.isEmpty(m_add_info)
                 )
         {
             Common.CloseKeyBoard(activity,edt_name);
@@ -148,6 +149,7 @@ public class Fragment_Jobs_Reserve extends Fragment {
             edt_additional_info.setError(null);
             edt_description.setError(null);
             edt_notes.setError(null);
+            edt_additional_info.setError(null);
             activity.jobReserveByData(jobsModel.getId(),m_name,m_phone,m_email,card_id,m_address,qualification,m_add_info,m_description,m_notes);
 
         }else
@@ -197,6 +199,14 @@ public class Fragment_Jobs_Reserve extends Fragment {
                 }else
                 {
                     edt_address.setError(null);
+                }
+
+                if (TextUtils.isEmpty(m_add_info))
+                {
+                    edt_additional_info.setError(getString(R.string.field_req));
+                }else
+                {
+                    edt_additional_info.setError(null);
                 }
 
                 if (TextUtils.isEmpty(qualification))

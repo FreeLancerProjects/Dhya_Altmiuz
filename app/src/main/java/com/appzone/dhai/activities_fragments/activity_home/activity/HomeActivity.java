@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.appzone.dhai.R;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_About_Us;
+import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Additional_Data;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Bank;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Contact;
 import com.appzone.dhai.activities_fragments.activity_home.fragments.fragment_home.Fragment_Home;
@@ -120,6 +121,7 @@ public class HomeActivity extends AppCompatActivity {
     private Fragment_Contact fragment_contact;
     private Fragment_About_Us fragment_about_us;
     private Fragment_Bank fragment_bank;
+    private Fragment_Additional_Data fragment_additional_data;
     ///////////////////////////////////////
     private Fragment_Main fragment_main;
     private Fragment_Profile fragment_profile;
@@ -206,18 +208,51 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         }, 3000);
             }if (intent.hasExtra("status")) {
-                new Handler()
-                        .postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                DisplayFragmentNotifications();
-                                ReadNotification();
-                                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                if (manager != null) {
-                                    manager.cancelAll();
-                                }
-                            }
-                        }, 1);
+
+                int status = intent.getIntExtra("status",0);
+                if (status == Tags.NOTIFICATION_DATA)
+                {
+
+                    if (intent.hasExtra("needed"))
+                    {
+                        final int msg_id = intent.getIntExtra("msg_id",0);
+                        final String needed = intent.getStringExtra("needed");
+                        final String title_ar = intent.getStringExtra("title_ar");
+                        final String title_en = intent.getStringExtra("title_en");
+
+                        new Handler()
+                                .postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                        if (manager != null) {
+                                            manager.cancelAll();
+                                        }
+
+                                        DisplayFragmentAdditonalData(msg_id,needed,title_ar,title_en);
+
+
+                                    }
+                                }, 1);
+                    }
+
+                }else
+                    {
+                        new Handler()
+                                .postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        DisplayFragmentNotifications();
+                                        ReadNotification();
+                                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                        if (manager != null) {
+                                            manager.cancelAll();
+                                        }
+                                    }
+                                }, 1);
+                    }
+
             }
         }
     }
@@ -280,6 +315,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void UpdateToken()
     {
+
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -297,13 +333,13 @@ public class HomeActivity extends AppCompatActivity {
                                             {
                                                 Log.e("token","Success");
                                             }else
-                                                {
-                                                    try {
-                                                        Log.e("Error_code", response.code() + "" + response.errorBody().string());
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    }
+                                            {
+                                                try {
+                                                    Log.e("Error_code", response.code() + "" + response.errorBody().string());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
                                                 }
+                                            }
                                         }
 
                                         @Override
@@ -318,7 +354,6 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
     private void getUnreadNotificationCount()
     {
@@ -842,6 +877,18 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    public void DisplayFragmentAdditonalData(int order_id,String request,String title_ar,String title_en) {
+        if (fragment_additional_data == null) {
+            fragment_additional_data = Fragment_Additional_Data.newInstance(order_id,request,title_ar,title_en);
+        }
+
+        if (fragment_additional_data.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_additional_data).commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_additional_data, "fragment_additional_data").addToBackStack("fragment_additional_data").commit();
+        }
+    }
+
     //////////////////////////////////////////////
     public void trainingReserve(int training_id,String m_name, String m_phone, String m_email, String m_add_info, String m_description, String m_notes) {
         final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
@@ -874,6 +921,19 @@ public class HomeActivity extends AppCompatActivity {
 
                             RefreshFragmentOrder();
                             RefreshFragmentTrainingAdapter();
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_profile!=null &&fragment_profile.isAdded())
+                                            {
+                                                fragment_profile.requestNewProfile();
+                                            }else
+                                            {
+                                                requestNewProfile();
+                                            }
+                                        }
+                                    },1);
 
                         }else
                             {
@@ -918,7 +978,19 @@ public class HomeActivity extends AppCompatActivity {
                             Toast.makeText(HomeActivity.this, getString(R.string.succ), Toast.LENGTH_SHORT).show();
                             fragmentManager.popBackStack();
                             RefreshFragmentOrder();
-
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_profile!=null &&fragment_profile.isAdded())
+                                            {
+                                                fragment_profile.requestNewProfile();
+                                            }else
+                                            {
+                                                requestNewProfile();
+                                            }
+                                        }
+                                    },1);
 
                         }else
                         {
@@ -963,6 +1035,19 @@ public class HomeActivity extends AppCompatActivity {
                             fragmentManager.popBackStack();
                             RefreshFragmentOrder();
 
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_profile!=null &&fragment_profile.isAdded())
+                                            {
+                                                fragment_profile.requestNewProfile();
+                                            }else
+                                            {
+                                                requestNewProfile();
+                                            }
+                                        }
+                                    },1);
 
                         }else
                         {
@@ -990,16 +1075,15 @@ public class HomeActivity extends AppCompatActivity {
                 });
     }
 
-    public void jobReserveByPDF(int job_id, String pdf_path)
+    public void jobReserveByPDF(int job_id)
     {
         RequestBody user_token_part = Common.getRequestBodyText(userModel.getToken());
         RequestBody job_id_part = Common.getRequestBodyText(String.valueOf(job_id));
-        MultipartBody.Part pdf_part = Common.getMultiPartFromPath(pdf_path,"file");
 
         final Dialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.show();
         Api.getService()
-                .jobPDFReserve(user_token_part,job_id_part,pdf_part)
+                .jobPDFReserve(user_token_part,job_id_part)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1019,6 +1103,20 @@ public class HomeActivity extends AppCompatActivity {
                                     },1);
                             RefreshFragmentOrder();
                             RefreshFragmentJobsAdapter();
+
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_profile!=null &&fragment_profile.isAdded())
+                                            {
+                                                fragment_profile.requestNewProfile();
+                                            }else
+                                                {
+                                                    requestNewProfile();
+                                                }
+                                        }
+                                    },1);
 
 
 
@@ -1073,6 +1171,20 @@ public class HomeActivity extends AppCompatActivity {
                                     },1);
                             RefreshFragmentJobsAdapter();
                             RefreshFragmentOrder();
+
+                            new Handler()
+                                    .postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (fragment_profile!=null &&fragment_profile.isAdded())
+                                            {
+                                                fragment_profile.requestNewProfile();
+                                            }else
+                                            {
+                                                requestNewProfile();
+                                            }
+                                        }
+                                    },1);
 
                         }else
                         {
@@ -1208,7 +1320,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void createAlertForCharge() {
 
-        Common.CreateSignAlertDialog(this,"");
+        Common.CreateSignAlertDialog(this,getString(R.string.no_enough_ch));
 
       /*  if (packageModelList.size() > 0) {
             CreatePackageDialog(packageModelList);
@@ -1353,6 +1465,37 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     //////////////////////////////////////////////
+    public void requestNewProfile()
+    {
+        Api.getService()
+                .getProfileData(userModel.getToken())
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        if (response.isSuccessful()&&response.body()!=null){
+                            userModel = response.body();
+                            preferences.create_update_userData(HomeActivity.this,response.body());
+                            userSingleTone.setUserModel(response.body());
+                        }else
+                        {
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+    }
+    //////////////////////////////////////////////
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ListenToAddNewNotification(final NotificationModel notificationModel)
@@ -1414,7 +1557,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public void Back() {
 
-        if (fragment_offers != null && fragment_offers.isVisible()) {
+        if (fragment_additional_data != null && fragment_additional_data.isVisible()) {
+            super.onBackPressed();
+
+        }else if (fragment_offers != null && fragment_offers.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_offers).commit();
 
         }

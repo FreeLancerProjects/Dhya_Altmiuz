@@ -236,10 +236,103 @@
                     android:longClickable="false"
                     />
             </LinearLayout>
-            <View
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray2"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:weightSum="3"
+                >
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:background="@color/gray"
+                    android:layout_weight="1.25"
+                    android:layout_gravity="center_vertical"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="@string/cv"
+                    />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:background="@color/gray"
+                    android:layout_weight="1.25"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@color/gray1"
+                android:layout_marginBottom="30dp"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:id="@+id/image_cv"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@color/gray3"
+                        />
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_cv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/ic_upload_cv"
+                            android:padding="3dp"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            />
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="@string/upload"
+                            android:textStyle="bold"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

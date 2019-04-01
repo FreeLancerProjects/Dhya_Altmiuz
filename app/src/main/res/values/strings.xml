@@ -87,7 +87,7 @@
     <string name="start">Start time</string>
     <string name="end_time">End time</string>
     <string name="register">Register</string>
-    <string name="additional_information">Additional information (optional)</string>
+    <string name="additional_information">Information required for service</string>
     <string name="notes_optional">Notes (optional)</string>
     <string name="details_optinal">Description (optional)</string>
     <string name="charge_package">Charge package</string>
@@ -129,11 +129,20 @@
     <string name="package_1">package</string>
     <string name="organization">Organization</string>
     <string name="phone_number">Phone number</string>
-    <string name="inc_ph_pas">incorrect phone or password</string>
+    <string name="inc_ph_pas">incorrect email or password</string>
     <string name="recharge_code">Recharge code</string>
     <string name="code">Code</string>
     <string name="charge2">Charge</string>
     <string name="inc_code">incorrect code</string>
+    <string name="no_enough_ch">No enough charge to reserve this service</string>
+    <string name="forget_password">Forget password ?</string>
+
+    <string name="we_will_send_you_a_link_to_on_the_email_recover_your_password">We will send you a link on your email to recover your password</string>
+    <string name="recover_password">Recover password</string>
+    <string name="inc_em">incorrect email address</string>
+    <string name="cv">CV</string>
+    <string name="up_cv_prof">Please upload your CV in your profile</string>
+    <string name="add_info_req">Additional info required</string>
 
     <string-array name="spinner_qualification">
         <item>-Choose-</item>
