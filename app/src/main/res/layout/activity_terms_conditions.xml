@@ -8,7 +8,7 @@
     android:background="@color/white"
     tools:context=".activities_fragments.activity_terms_conditions.TermsConditionsActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:contentInsetStart="0dp"
@@ -41,7 +41,7 @@
                 android:longClickable="false"
                 />
         </LinearLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
     <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:id="@+id/smoothprogressbar"
         android:layout_width="match_parent"

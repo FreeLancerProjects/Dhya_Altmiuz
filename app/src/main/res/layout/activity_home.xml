@@ -8,7 +8,7 @@
     android:orientation="vertical"
     >
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/toolbar"
@@ -85,7 +85,7 @@
             </LinearLayout>
 
         </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
     <FrameLayout
         android:id="@+id/fragment_app_container"
         android:layout_width="match_parent"

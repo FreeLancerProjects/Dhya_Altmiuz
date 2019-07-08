@@ -14,9 +14,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +28,8 @@ import android.widget.TextView;
 import com.appzone.dhai.R;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -52,6 +54,14 @@ public class Common {
 
 
     }
+    /*public static MultipartBody.Part getListMultiPartBody(Uri uri, Context context, String image_cv)
+    {
+        String path = getImagePath(context,uri);
+        File file = getFileFromImagePath(path);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"),file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData(image_cv,file.getName(),requestBody);
+        return part;
+    }*/
     public static Snackbar CreateSnackBar(Context context, View view_id, String msg)
     {
         final Snackbar snackbar = Snackbar.make(view_id,"",Snackbar.LENGTH_INDEFINITE);
@@ -68,7 +78,7 @@ public class Common {
         });
 
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
-        TextView textView = layout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = layout.findViewById(R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
         layout.setPadding(0,0,0,0);
         layout.addView(view);

@@ -14,6 +14,8 @@ import com.appzone.dhai.models.Terms_ConditionModel;
 import com.appzone.dhai.models.TrainingDataModel;
 import com.appzone.dhai.models.UserModel;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -29,7 +31,7 @@ import retrofit2.http.Query;
 
 public interface Service {
     @FormUrlEncoded
-    @POST("/api/login")
+    @POST("api/login")
     Call<UserModel> SignIn(@Field("email") String phone,
                            @Field("password") String password
     );
@@ -52,77 +54,83 @@ public interface Service {
                                        @Part("password") RequestBody password
     );
 
-    @GET("/api/get-terms-condition")
+    @GET("api/get-terms-condition")
     Call<Terms_ConditionModel> getTerms();
 
     @FormUrlEncoded
-    @POST("/api/fire-base-token")
+    @POST("api/fire-base-token")
     Call<ResponseBody> updateToken(@Field("token") String user_token,
                                    @Field("fire_base_token") String fire_base_token);
 
     @Multipart
-    @POST("/api/edit-profile")
+    @POST("api/edit-profile")
     Call<UserModel> updateImage(@Part("token") RequestBody user_token,
                                 @Part MultipartBody.Part avatar
     );
 
+    @Multipart
+    @POST("api/edit-profile")
+    Call<UserModel> updateCv(@Part("token") RequestBody user_token,
+                             @Part List<MultipartBody.Part> image_cv
+    );
+
     @FormUrlEncoded
-    @POST("/api/edit-profile")
+    @POST("api/edit-profile")
     Call<UserModel> updateName(@Field("token") String user_token,
                                @Field("name") String name
     );
 
     @FormUrlEncoded
-    @POST("/api/edit-profile")
+    @POST("api/edit-profile")
     Call<UserModel> updateEmail(@Field("token") String user_token,
                                 @Field("email") String email
     );
 
     @FormUrlEncoded
-    @POST("/api/logout")
+    @POST("api/logout")
     Call<ResponseBody> logout(@Field("token") String user_token);
 
-    @GET("/api/get-about-us")
+    @GET("api/get-about-us")
     Call<AboutModel> getAboutUS();
 
-    @GET("/api/ads")
+    @GET("api/ads")
     Call<AdsDataModel> getAds();
 
-    @GET("/api/offers")
+    @GET("api/offers")
     Call<OfferDataModel> getOffers(@Query("page") int page);
 
-    @GET("/api/category/{type}/services")
+    @GET("api/category/{type}/services")
     Call<ServiceDataModel> getServices(@Path("type") int type, @Query("page") int page);
 
-    @GET("/api/trainings")
+    @GET("api/trainings")
     Call<TrainingDataModel> getTrainings(@Query("token") String user_token, @Query("page") int page);
 
-    @GET("/api/packages")
+    @GET("api/packages")
     Call<PackageDataModel> getPackage();
 
     @Multipart
-    @POST("/api/reserve-package")
+    @POST("api/reserve-package")
     Call<ResponseBody> reservePackage(@Part("token") RequestBody user_token,
                                       @Part("package_id") RequestBody package_id,
                                       @Part MultipartBody.Part image
     );
 
-    @GET("/api/bank-accounts")
+    @GET("api/bank-accounts")
     Call<BankAccountDataModel> getBankAccount();
 
     @FormUrlEncoded
-    @POST("/api/contacts")
+    @POST("api/contacts")
     Call<ResponseBody> sendContacts(@Field("name") String name,
                                     @Field("email") String email,
                                     @Field("message") String message
     );
 
 
-    @GET("/api/jobs")
+    @GET("api/jobs")
     Call<JobsDataModel> getJobs(@Query("token") String user_token, @Query("page") int page);
 
     @FormUrlEncoded
-    @POST("/api/reserve-training")
+    @POST("api/reserve-training")
     Call<ResponseBody> trainingReserve(@Field("token") String user_token,
                                        @Field("training_id") int training_id,
                                        @Field("name") String name,
@@ -135,7 +143,7 @@ public interface Service {
     );
 
     @FormUrlEncoded
-    @POST("/api/reserve-service")
+    @POST("api/reserve-service")
     Call<ResponseBody> serviceReserve(@Field("token") String user_token,
                                       @Field("service_id") int service_id,
                                       @Field("name") String name,
@@ -148,7 +156,7 @@ public interface Service {
     );
 
     @FormUrlEncoded
-    @POST("/api/reserve-service")
+    @POST("api/reserve-service")
     Call<ResponseBody> electronicServiceReserve(@Field("token") String user_token,
                                                 @Field("service_id") int service_id,
                                                 @Field("name") String name,
@@ -163,7 +171,7 @@ public interface Service {
     );
 
     @FormUrlEncoded
-    @POST("/api/reserve-job")
+    @POST("api/reserve-job")
     Call<ResponseBody> jobDataReserve(@Field("token") String user_token,
                                       @Field("job_id") int service_id,
                                       @Field("name") String name,
@@ -180,12 +188,12 @@ public interface Service {
     );
 
     @Multipart
-    @POST("/api/reserve-job")
+    @POST("api/reserve-job")
     Call<ResponseBody> jobPDFReserve(@Part("token") RequestBody user_token,
                                      @Part("job_id") RequestBody job_id
     );
 
-    @GET("/api/notifications")
+    @GET("api/notifications")
     Call<NotificationDataModel> getNotification(@Query("token") String user_token,
                                                 @Query("page") int page
     );
@@ -194,29 +202,29 @@ public interface Service {
     Call<NotificationCount> getNotificationCount(@Query("token") String user_token);
 
     @FormUrlEncoded
-    @POST("/api/notifications")
+    @POST("api/notifications")
     Call<ResponseBody> readNotifications(@Field("token") String token);
 
     @FormUrlEncoded
-    @POST("/api/me")
+    @POST("api/me")
     Call<UserModel> getProfileData(@Field("token") String user_token);
 
-    @GET("/api/orders")
+    @GET("api/orders")
     Call<OrderDataModel> getOrders(@Query("token") String token,
                                    @Query("type") String type,
                                    @Query("page") int page
     );
 
     @FormUrlEncoded
-    @POST("/api/disable-coupon")
+    @POST("api/disable-coupon")
     Call<ResponseBody> chargeCoupon(@Field("code") String code,
                                     @Field("token") String user_token);
 
     @FormUrlEncoded
-    @POST("/api/forget")
-    Call<ResponseBody> forgetPassword(@Field("email") String  email);
+    @POST("api/forget")
+    Call<ResponseBody> forgetPassword(@Field("email") String email);
 
     @FormUrlEncoded
-    @POST("/api/answer-notification")
-    Call<ResponseBody> sendAnswer(@Field("answer") String answer,@Field("msg_id") int msg_id);
+    @POST("api/answer-notification")
+    Call<ResponseBody> sendAnswer(@Field("answer") String answer, @Field("msg_id") int msg_id);
 }

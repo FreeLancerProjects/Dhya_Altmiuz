@@ -4,9 +4,9 @@ import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,11 +109,11 @@ public class Fragment_Job_Details extends Fragment {
                     expand_layout.collapse(true);
                 }
 
-                if (userModel.getImage_cv()!=null)
+                if (userModel.getUser_cvs()!=null)
                 {
                   final ProgressDialog dialog =  Common.createProgressDialog(activity,getString(R.string.wait));
                   dialog.show();
-                  Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL+userModel.getImage_cv())).fit().into(image_cv, new Callback() {
+              /*    Picasso.with(activity).load(Uri.parse(Tags.IMAGE_URL+userModel.getImage_cv())).fit().into(image_cv, new Callback() {
                       @Override
                       public void onSuccess() {
                           dialog.dismiss();
@@ -124,7 +124,7 @@ public class Fragment_Job_Details extends Fragment {
                       public void onError() {
 
                       }
-                  });
+                  });*/
                 }else
                     {
                         Common.CreateSignAlertDialog(activity,getString(R.string.up_cv_prof));
