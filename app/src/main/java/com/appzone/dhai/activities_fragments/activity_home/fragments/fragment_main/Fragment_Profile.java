@@ -136,7 +136,7 @@ public class Fragment_Profile extends Fragment {
         recyclerView_cvimages.setDrawingCacheEnabled(true);
         recyclerView_cvimages.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         recyclerView_cvimages.setItemViewCacheSize(25);
-        galleryAdapter = new GalleryAdapter(user_cvsList, activity);
+        galleryAdapter = new GalleryAdapter(user_cvsList, activity,this);
         recyclerView_cvimages.setLayoutManager(new LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,true));
         recyclerView_cvimages.setAdapter(galleryAdapter);
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -773,4 +773,63 @@ public class Fragment_Profile extends Fragment {
                 });
     }
 
+    public void Delete(UserModel.User_Cvs user_cvs) {
+        final Dialog dialog = Common.createProgressDialog(activity, getString(R.string.wait));
+        dialog.show();
+
+
+
+        try {
+
+            Api.getService()
+                    .deltecv(userModel.getToken(), user_cvs.getId())
+                    .enqueue(new Callback<UserModel>() {
+                        @Override
+                        public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+
+
+                            if (response.isSuccessful()) {
+                                dialog.dismiss();
+
+                                if (response.body() != null) {
+                                    Toast.makeText(activity, getString(R.string.succ), Toast.LENGTH_SHORT).show();
+                                    UpdateUserData(response.body());
+
+
+                                } else {
+                                    Common.CreateSignAlertDialog(activity, getString(R.string.something));
+                                }
+                            } else {
+
+                                dialog.dismiss();
+
+                                if (response.code() == 422) {
+                                    Common.CreateSignAlertDialog(activity, getString(R.string.phone_number_exists));
+
+                                } else {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+
+                                try {
+                                    Log.e("error_code", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserModel> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                Log.e("Error", t.getMessage());
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            Toast.makeText(activity, R.string.inc_img_path, Toast.LENGTH_SHORT).show();
+
+        }
+    }
 }

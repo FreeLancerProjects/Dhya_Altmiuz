@@ -79,7 +79,11 @@ public interface Service {
     Call<UserModel> updateName(@Field("token") String user_token,
                                @Field("name") String name
     );
-
+    @FormUrlEncoded
+    @POST("api/edit-profile")
+    Call<UserModel> deltecv(@Field("token") String user_token,
+                               @Field("image_id") int image_id
+    );
     @FormUrlEncoded
     @POST("api/edit-profile")
     Call<UserModel> updateEmail(@Field("token") String user_token,
